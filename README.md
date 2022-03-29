@@ -13,8 +13,11 @@ using Literate;
 Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavor = Literate.CommonMarkFlavor());
 ```
 
+**Remark**: Tested with Julia `1.7.2`.
+
 ````julia
 using Literate;
+using Statistics;
 ````
 
 ## Question 001
@@ -51,16 +54,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.037448766e-315
- 1.00221817e-315
- 1.04263859e-315
- 1.245281393e-315
- 9.77883817e-316
- 9.7788429e-316
- 9.7788453e-316
- 1.0436068e-315
- 1.043607117e-315
- 1.043607433e-315
+ 1.007131317e-315
+ 1.06213276e-315
+ 1.05599291e-315
+ 1.062160586e-315
+ 1.007133926e-315
+ 1.007134163e-315
+ 1.0071344e-315
+ 1.06215774e-315
+ 1.062158056e-315
+ 1.06215869e-315
 ````
 
 Which is equivalent of
@@ -71,16 +74,16 @@ vA = Array{Float64, 1}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.037448766e-315
- 1.00221817e-315
- 1.04263859e-315
- 1.245281393e-315
- 9.77883817e-316
- 9.7788429e-316
- 9.7788453e-316
- 1.0436068e-315
- 1.043607117e-315
- 1.043607433e-315
+ 1.06248564e-315
+ 1.06371124e-315
+ 1.06382539e-315
+ 1.06386049e-315
+ 1.01249529e-315
+ 1.012495526e-315
+ 1.012495764e-315
+ 1.06385764e-315
+ 1.06385796e-315
+ 1.063858275e-315
 ````
 
 ## Question 004
@@ -243,6 +246,234 @@ findall(!iszero, [1, 2, 0, 0, 4, 0])
  1
  2
  5
+````
+
+## Question 011
+Create a 3x3 identity matrix. (★☆☆)
+
+````julia
+mA = I(3)
+````
+
+````
+3×3 Diagonal{Bool, Vector{Bool}}:
+ 1  ⋅  ⋅
+ ⋅  1  ⋅
+ ⋅  ⋅  1
+````
+
+An alternative method (Explicit matrix) would be:
+
+````julia
+mA = Matrix(1.0I, 3, 3)
+````
+
+````
+3×3 Matrix{Float64}:
+ 1.0  0.0  0.0
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0
+````
+
+## Question 012
+Create a 2x2x2 array with random values. (★☆☆)
+
+````julia
+mA = randn(2, 2, 2)
+````
+
+````
+2×2×2 Array{Float64, 3}:
+[:, :, 1] =
+ -0.461942  -0.0991088
+  2.12957   -0.248355
+
+[:, :, 2] =
+ 0.396743  -0.897117
+ 0.982021  -0.935146
+````
+
+## Question 013
+Create a 5x5 array with random values and find the minimum and maximum values. (★☆☆)
+
+````julia
+mA = rand(5, 5);
+minVal = minimum(mA)
+maxVal = maximum(mA)
+````
+
+````
+0.997261216230553
+````
+
+Using `extrema` one could get both values at once:
+
+````julia
+minVal, maxVal = extrema(mA);
+````
+
+## Question 014
+Create a random vector of size 30 and find the mean value. (★☆☆)
+
+````julia
+meanVal = mean(randn(30))
+````
+
+````
+-0.016801216176517284
+````
+
+## Question 015
+Create a 2d array with 1 on the border and 0 inside. (★☆☆)
+
+````julia
+mA = zeros(4, 4);
+mA[:, [1, end]] .= 1;
+mA[[1, end], :] .= 1;
+mA
+````
+
+````
+4×4 Matrix{Float64}:
+ 1.0  1.0  1.0  1.0
+ 1.0  0.0  0.0  1.0
+ 1.0  0.0  0.0  1.0
+ 1.0  1.0  1.0  1.0
+````
+
+An alternative way:
+
+````julia
+mA = ones(4, 5);
+mA[2:(end - 1), 2:(end - 1)] .= 0;
+````
+
+Using one line code (For square matrix):
+
+````julia
+mA = zeros(4, 5);
+mA[[LinearIndices(mA)[a] for a in CartesianIndices(mA) if (any(a.I .== 1) || a.I[1] == size(mA, 1) || a.I[2] == size(mA, 2))]] .= 1;
+````
+
+## Question 016
+Add a border of zeros around the array. (★☆☆)
+
+````julia
+mB = zeros(size(mA) .+ 2);
+mB[2:(end - 1), 2:(end - 1)] = mA;
+mB
+````
+
+````
+6×7 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  1.0  1.0  1.0  1.0  1.0  0.0
+ 0.0  1.0  0.0  0.0  0.0  1.0  0.0
+ 0.0  1.0  0.0  0.0  0.0  1.0  0.0
+ 0.0  1.0  1.0  1.0  1.0  1.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0
+````
+
+## Question 017
+Evaluate the following expressions. (★☆☆)
+
+````julia
+0 * NaN
+````
+
+````
+NaN
+````
+
+````julia
+NaN == NaN
+````
+
+````
+false
+````
+
+````julia
+Inf > NaN
+````
+
+````
+false
+````
+
+````julia
+NaN - NaN
+````
+
+````
+NaN
+````
+
+````julia
+NaN in [NaN]
+````
+
+````
+false
+````
+
+````julia
+0.3 == 3 * 0.1
+````
+
+````
+false
+````
+
+## Question 018
+Create a 5x5 matrix with values [1, 2, 3, 4] just below the diagonal. (★☆☆)
+
+````julia
+mA = diagm(5, 5, -1 => 1:4)
+````
+
+````
+5×5 Matrix{Int64}:
+ 0  0  0  0  0
+ 1  0  0  0  0
+ 0  2  0  0  0
+ 0  0  3  0  0
+ 0  0  0  4  0
+````
+
+## Question 019
+Create a 8x8 matrix and fill it with a checkerboard pattern. (★☆☆)
+
+````julia
+mA = zeros(8, 8);
+mA[2:2:end, 1:2:end] .= 1;
+mA[1:2:end, 2:2:end] .= 1;
+mA
+````
+
+````
+8×8 Matrix{Float64}:
+ 0.0  1.0  0.0  1.0  0.0  1.0  0.0  1.0
+ 1.0  0.0  1.0  0.0  1.0  0.0  1.0  0.0
+ 0.0  1.0  0.0  1.0  0.0  1.0  0.0  1.0
+ 1.0  0.0  1.0  0.0  1.0  0.0  1.0  0.0
+ 0.0  1.0  0.0  1.0  0.0  1.0  0.0  1.0
+ 1.0  0.0  1.0  0.0  1.0  0.0  1.0  0.0
+ 0.0  1.0  0.0  1.0  0.0  1.0  0.0  1.0
+ 1.0  0.0  1.0  0.0  1.0  0.0  1.0  0.0
+````
+
+## Question 020
+Convert the linear index 100 to a _Cartesian Index_ of a size (6,7,8). (★☆☆)
+
+````julia
+mA = rand(6, 7, 8);
+cartIdx = CartesianIndices(mA)[100]; #<! See https://discourse.julialang.org/t/14666
+mA[cartIdx] == mA[100]
+````
+
+````
+true
 ````
 
 ---

@@ -12,8 +12,11 @@
 # using Literate;
 # Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavor = Literate.CommonMarkFlavor());
 # ```
+#
+# **Remark**: Tested with Julia `1.7.2`.
 
 using Literate;
+using Statistics;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
@@ -95,3 +98,94 @@ mA[:] = 0:8;
 # Find indices of non-zero elements from `[1, 2, 0, 0, 4, 0]`. (★☆☆)
 
 findall(!iszero, [1, 2, 0, 0, 4, 0])
+
+# ## Question 011
+# Create a 3x3 identity matrix. (★☆☆)
+
+mA = I(3)
+
+# An alternative method (Explicit matrix) would be:
+
+mA = Matrix(1.0I, 3, 3)
+
+# ## Question 012
+# Create a 2x2x2 array with random values. (★☆☆)
+
+mA = randn(2, 2, 2)
+
+# ## Question 013
+# Create a 5x5 array with random values and find the minimum and maximum values. (★☆☆)
+
+mA = rand(5, 5);
+minVal = minimum(mA)
+maxVal = maximum(mA)
+
+# Using `extrema` one could get both values at once:
+
+minVal, maxVal = extrema(mA);
+
+# ## Question 014
+# Create a random vector of size 30 and find the mean value. (★☆☆)
+
+meanVal = mean(randn(30))
+
+# ## Question 015
+# Create a 2d array with 1 on the border and 0 inside. (★☆☆)
+
+mA = zeros(4, 4);
+mA[:, [1, end]] .= 1;
+mA[[1, end], :] .= 1;
+mA
+
+# An alternative way:
+
+mA = ones(4, 5);
+mA[2:(end - 1), 2:(end - 1)] .= 0;
+
+# Using one line code:
+
+mA = zeros(4, 5);
+mA[[LinearIndices(mA)[a] for a in CartesianIndices(mA) if (any(a.I .== 1) || a.I[1] == size(mA, 1) || a.I[2] == size(mA, 2))]] .= 1;
+
+# ## Question 016
+# Add a border of zeros around the array. (★☆☆)
+
+mB = zeros(size(mA) .+ 2);
+mB[2:(end - 1), 2:(end - 1)] = mA;
+mB
+
+# ## Question 017
+# Evaluate the following expressions. (★☆☆)
+
+0 * NaN
+#+
+NaN == NaN
+#+
+Inf > NaN
+#+
+NaN - NaN
+#+
+NaN in [NaN]
+#+
+0.3 == 3 * 0.1
+
+# ## Question 018
+# Create a 5x5 matrix with values [1, 2, 3, 4] just below the diagonal. (★☆☆)
+
+mA = diagm(5, 5, -1 => 1:4)
+
+# ## Question 019
+# Create a 8x8 matrix and fill it with a checkerboard pattern. (★☆☆)
+
+mA = zeros(8, 8);
+mA[2:2:end, 1:2:end] .= 1;
+mA[1:2:end, 2:2:end] .= 1;
+mA
+
+# ## Question 020
+# Convert the linear index 100 to a _Cartesian Index_ of a size (6,7,8). (★☆☆)
+
+mA = rand(6, 7, 8);
+cartIdx = CartesianIndices(mA)[100]; #<! See https://discourse.julialang.org/t/14666
+mA[cartIdx] == mA[100]
+
