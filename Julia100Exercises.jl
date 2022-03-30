@@ -18,6 +18,7 @@
 using Literate;
 using LinearAlgebra;
 using Statistics;
+using Dates;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
@@ -288,3 +289,80 @@ vA = rand(1:10, 6);
 vB = rand(1:10, 6);
 
 vA[findall(in(vB), vA)]
+
+# ## Question 031
+# Suppress Julia's warnings. (★☆☆)
+
+# One could use [Suppressor.jl](https://github.com/JuliaIO/Suppressor.jl).
+
+# ## Question 032
+# Compare `sqrt(-1)` and `sqrt(-1 + 0im)`. (★☆☆)
+
+try
+    sqrt(-1)
+catch e
+    println(e)
+end
+#+
+sqrt(-1 + 0im)
+
+# ## Question 033
+# Display yesterday, today and tomorrow's date. (★☆☆)
+
+println("Yesterday: $(today() - Day(1))");
+println("Today: $(today())");
+println("Tomorrow: $(today() + Day(1))");
+
+# ## Question 034
+# Display all the dates corresponding to the month of July 2016. (★★☆)
+
+collect(Date(2016,7,1):Day(1):Date(2016,7,31))
+
+# ## Question 035
+# Compute `((mA + mB) * (-mA / 2))`` in place. (★★☆)
+
+mA = rand(2, 2);
+mB = rand(2, 2);
+mA .= ((mA .+ mB) .* (.-mA ./ 2))
+
+# Using the dot macro:
+
+@. mA = ((mA + mB) * (-mA / 2));
+
+# ## Question 036
+# Extract the integer part of a random array of positive numbers using 4 different methods. (★★☆)
+
+mA = 5 * rand(3, 3);
+
+# Option 1:
+floor.(mA)
+
+# Option 2:
+round.(mA .- 0.5) #<! Generates -0.0 for numbers smaller than 0.5
+
+# Option 3:
+mA .÷ 1
+
+# Option 4:
+mA .- rem.(mA, 1)
+
+# ## Question 037
+# Create a `5x5` matrix with row values ranging from 0 to 4. (★★☆)
+
+mA = repeat(reshape(0:4, 1, 5), 5, 1)
+
+# ## Question 038
+# Generate an array using a generator of 10 numbers. (★☆☆)
+
+vA = collect(x for x in 1:10)
+
+# ## Question 039
+# Create a vector of size 10 with values ranging from 0 to 1, both excluded. (★★☆)
+
+vA = LinRange(0, 1, 12)[2:(end - 1)]
+
+# ## Question 040
+# Create a random vector of size 10 and sort it. (★★☆)
+
+vA = rand(1:10, 10);
+sort(vA)

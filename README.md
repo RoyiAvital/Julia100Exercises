@@ -19,6 +19,7 @@ Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavo
 using Literate;
 using LinearAlgebra;
 using Statistics;
+using Dates;
 ````
 
 ## Question 001
@@ -49,16 +50,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.11408467e-315
- 1.02038532e-315
- 1.111645885e-315
- 1.0117010135e-314
- 9.942418403e-315
- 9.94241864e-315
- 9.942418877e-315
- 1.112690616e-315
- 1.112690933e-315
- 1.11269125e-315
+ 1.001902269e-314
+ 9.95064819e-315
+ 1.0100021707e-314
+ 9.95136028e-315
+ 1.001903265e-314
+ 1.0019032886e-314
+ 1.0019033123e-314
+ 9.95135775e-315
+ 9.951358066e-315
+ 9.95135838e-315
 ````
 
 Which is equivalent of
@@ -69,16 +70,16 @@ vA = Array{Float64, 1}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.11408467e-315
- 1.02038532e-315
- 1.111645885e-315
- 1.0117010135e-314
- 9.942418403e-315
- 9.94241864e-315
- 9.942418877e-315
- 1.112690616e-315
- 1.112690933e-315
- 1.11269125e-315
+ 1.5e-323
+ 1.6e-322
+ 6.9525322588186e-310
+ 4.94e-322
+ 4.94e-321
+ 1.235e-321
+ 1.0e-322
+ 1.5e-323
+ 1.6e-322
+ 2.0e-323
 ````
 
 ## Question 004
@@ -280,12 +281,12 @@ mA = randn(2, 2, 2)
 ````
 2×2×2 Array{Float64, 3}:
 [:, :, 1] =
- 1.16694   1.35242
- 0.527739  0.836723
+ -0.498878  -0.201202
+ -0.281262   1.30654
 
 [:, :, 2] =
-  0.636307   0.125255
- -0.337548  -1.45923
+ -0.353395    1.07998
+ -0.0478391  -0.052116
 ````
 
 ## Question 013
@@ -297,7 +298,7 @@ minVal = minimum(mA)
 ````
 
 ````
-0.11627165339593515
+0.07665632135292144
 ````
 
 ````julia
@@ -305,7 +306,7 @@ maxVal = maximum(mA)
 ````
 
 ````
-0.9856597266425426
+0.9546070838168916
 ````
 
 Using `extrema()` one could get both values at once:
@@ -322,7 +323,7 @@ meanVal = mean(randn(30))
 ````
 
 ````
--0.31276232069197635
+-0.19466031296164443
 ````
 
 ## Question 015
@@ -507,10 +508,10 @@ mA .= (mA .- mean(mA)) ./ std(mA) #<! Pay attention that `@.` will yield error (
 
 ````
 4×4 Matrix{Float64}:
-  1.90873    0.380382  -0.213327   0.709524
-  0.845878  -0.899811   0.126485   1.07044
- -0.539166  -0.948521  -0.659701  -1.68479
- -1.02982   -0.38057   -0.192279   1.50654
+  1.03727   -0.799698  -0.0420041  -1.21148
+ -0.235278   1.5447     0.149858    0.690115
+ -1.38249   -0.935836   1.9057     -0.460821
+ -0.555857  -0.759884   1.16036    -0.10465
 ````
 
 ## Question 023
@@ -528,7 +529,7 @@ sMyColor = sColor(rand(UInt8, 4)...)
 ````
 
 ````
-Main.##342.sColor(0xbb, 0x77, 0x41, 0xce)
+Main.##353.sColor(0xa6, 0x80, 0xc7, 0xa9)
 ````
 
 ## Question 024
@@ -540,8 +541,8 @@ mA = rand(2, 4) * randn(4, 3)
 
 ````
 2×3 Matrix{Float64}:
- -0.762299   0.316353  0.782141
-  0.493932  -0.198625  0.0322498
+  1.28855    0.200434  1.16382
+ -0.0296393  0.756797  0.121028
 ````
 
 ## Question 025
@@ -554,14 +555,14 @@ map!(x -> ((x > 3) && (x < 8)) ? -x : x, vA, vA)
 
 ````
 8-element Vector{Int64}:
-  1
-  2
-  9
- -7
- -5
  -6
-  3
   1
+ -7
+ -6
+  8
+ -5
+ -7
+ -6
 ````
 
 Using logical indices one could use:
@@ -602,9 +603,9 @@ vZ .^ vZ
 
 ````
 3-element Vector{Int64}:
- 10000000000
-         256
-          27
+   256
+   256
+ 46656
 ````
 
 ````julia
@@ -616,7 +617,7 @@ end
 ````
 
 ````
-MethodError(<<, (2, [10, 4, 3]), 0x0000000000007b71)
+MethodError(<<, (2, [4, 4, 6]), 0x0000000000007bc9)
 
 ````
 
@@ -634,9 +635,9 @@ false
 
 ````
 3-element Vector{Complex{Int64}}:
- 0 + 10im
  0 + 4im
- 0 + 3im
+ 0 + 4im
+ 0 + 6im
 ````
 
 ````julia
@@ -645,9 +646,9 @@ vZ / 1 / 1
 
 ````
 3-element Vector{Float64}:
- 10.0
-  4.0
-  3.0
+ 4.0
+ 4.0
+ 6.0
 ````
 
 ````julia
@@ -706,16 +707,16 @@ map(x -> x > 0 ? ceil(x) : floor(x), vA)
 
 ````
 10-element Vector{Float64}:
- -2.0
   1.0
+ -1.0
+ -1.0
+  1.0
+ -1.0
+  2.0
+ -1.0
   2.0
   1.0
-  4.0
-  3.0
- -1.0
   1.0
- -1.0
- -1.0
 ````
 
 ## Question 030
@@ -729,8 +730,247 @@ vA[findall(in(vB), vA)]
 ````
 
 ````
-1-element Vector{Int64}:
- 7
+2-element Vector{Int64}:
+ 3
+ 8
+````
+
+## Question 031
+Suppress Julia's warnings. (★☆☆)
+
+One could use [Suppressor.jl](https://github.com/JuliaIO/Suppressor.jl).
+
+## Question 032
+Compare `sqrt(-1)` and `sqrt(-1 + 0im)`. (★☆☆)
+
+````julia
+try
+    sqrt(-1)
+catch e
+    println(e)
+end
+````
+
+````
+DomainError(-1.0, "sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")
+
+````
+
+````julia
+sqrt(-1 + 0im)
+````
+
+````
+0.0 + 1.0im
+````
+
+## Question 033
+Display yesterday, today and tomorrow's date. (★☆☆)
+
+````julia
+println("Yesterday: $(today() - Day(1))");
+println("Today: $(today())");
+println("Tomorrow: $(today() + Day(1))");
+````
+
+````
+Yesterday: 2022-03-29
+Today: 2022-03-30
+Tomorrow: 2022-03-31
+
+````
+
+## Question 034
+Display all the dates corresponding to the month of July 2016. (★★☆)
+
+````julia
+collect(Date(2016,7,1):Day(1):Date(2016,7,31))
+````
+
+````
+31-element Vector{Date}:
+ 2016-07-01
+ 2016-07-02
+ 2016-07-03
+ 2016-07-04
+ 2016-07-05
+ 2016-07-06
+ 2016-07-07
+ 2016-07-08
+ 2016-07-09
+ 2016-07-10
+ 2016-07-11
+ 2016-07-12
+ 2016-07-13
+ 2016-07-14
+ 2016-07-15
+ 2016-07-16
+ 2016-07-17
+ 2016-07-18
+ 2016-07-19
+ 2016-07-20
+ 2016-07-21
+ 2016-07-22
+ 2016-07-23
+ 2016-07-24
+ 2016-07-25
+ 2016-07-26
+ 2016-07-27
+ 2016-07-28
+ 2016-07-29
+ 2016-07-30
+ 2016-07-31
+````
+
+## Question 035
+Compute `((mA + mB) * (-mA / 2))`` in place. (★★☆)
+
+````julia
+mA = rand(2, 2);
+mB = rand(2, 2);
+mA .= ((mA .+ mB) .* (.-mA ./ 2))
+````
+
+````
+2×2 Matrix{Float64}:
+ -0.284374  -0.0471688
+ -0.110414  -0.425728
+````
+
+Using the dot macro:
+
+````julia
+@. mA = ((mA + mB) * (-mA / 2));
+````
+
+## Question 036
+Extract the integer part of a random array of positive numbers using 4 different methods. (★★☆)
+
+````julia
+mA = 5 * rand(3, 3);
+````
+
+Option 1:
+
+````julia
+floor.(mA)
+````
+
+````
+3×3 Matrix{Float64}:
+ 0.0  0.0  1.0
+ 3.0  4.0  1.0
+ 3.0  4.0  4.0
+````
+
+Option 2:
+
+````julia
+round.(mA .- 0.5) #<! Generates -0.0 for numbers smaller than 0.5
+````
+
+````
+3×3 Matrix{Float64}:
+ 0.0  0.0  1.0
+ 3.0  4.0  1.0
+ 3.0  4.0  4.0
+````
+
+Option 3:
+
+````julia
+mA .÷ 1
+````
+
+````
+3×3 Matrix{Float64}:
+ 0.0  0.0  1.0
+ 3.0  4.0  1.0
+ 3.0  4.0  4.0
+````
+
+Option 4:
+
+````julia
+mA .- rem.(mA, 1)
+````
+
+````
+3×3 Matrix{Float64}:
+ 0.0  0.0  1.0
+ 3.0  4.0  1.0
+ 3.0  4.0  4.0
+````
+
+## Question 037
+Create a `5x5` matrix with row values ranging from 0 to 4. (★★☆)
+
+````julia
+mA = repeat(reshape(0:4, 1, 5), 5, 1)
+````
+
+````
+5×5 Matrix{Int64}:
+ 0  1  2  3  4
+ 0  1  2  3  4
+ 0  1  2  3  4
+ 0  1  2  3  4
+ 0  1  2  3  4
+````
+
+## Question 038
+Generate an array using a generator of 10 numbers. (★☆☆)
+
+````julia
+vA = collect(x for x in 1:10)
+````
+
+````
+10-element Vector{Int64}:
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+````
+
+## Question 039
+Create a vector of size 10 with values ranging from 0 to 1, both excluded. (★★☆)
+
+````julia
+vA = LinRange(0, 1, 12)[2:(end - 1)]
+````
+
+````
+10-element LinRange{Float64, Int64}:
+ 0.0909091,0.181818,0.272727,0.363636,…,0.636364,0.727273,0.818182,0.909091
+````
+
+## Question 040
+Create a random vector of size 10 and sort it. (★★☆)
+
+````julia
+vA = rand(1:10, 10);
+sort(vA)
+````
+
+````
+10-element Vector{Int64}:
+  1
+  1
+  2
+  3
+  3
+  4
+  7
+  7
+  9
+ 10
 ````
 
 ---
