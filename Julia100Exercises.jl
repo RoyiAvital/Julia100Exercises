@@ -102,7 +102,7 @@ mA = I(3)
 
 # An alternative method (Explicit matrix) would be:
 
-mA = Matrix(1.0I, 3, 3)
+mA = Matrix(I, 3, 3) #<! For Float64: Matrix{Float64}(I, 3, 3)
 
 # ## Question 012
 # Create a 2x2x2 array with random values. (★☆☆)
@@ -114,9 +114,10 @@ mA = randn(2, 2, 2)
 
 mA = rand(5, 5);
 minVal = minimum(mA)
+#+
 maxVal = maximum(mA)
 
-# Using `extrema` one could get both values at once:
+# Using `extrema()` one could get both values at once:
 
 minVal, maxVal = extrema(mA);
 

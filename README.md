@@ -49,16 +49,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.5e-323
- 1.6e-322
- 6.9525322588186e-310
- 4.94e-322
- 4.94e-321
- 1.235e-321
- 1.0e-322
- 1.5e-323
- 1.6e-322
- 2.0e-323
+ 1.0023197345e-314
+ 9.88502015e-315
+ 9.885053666e-315
+ 9.885336034e-315
+ 9.9665458e-315
+ 9.96654604e-315
+ 9.966546276e-315
+ 9.885090345e-315
+ 9.88509066e-315
+ 9.88509098e-315
 ````
 
 Which is equivalent of
@@ -260,14 +260,14 @@ mA = I(3)
 An alternative method (Explicit matrix) would be:
 
 ````julia
-mA = Matrix(1.0I, 3, 3)
+mA = Matrix(I, 3, 3) #<! For Float64: Matrix{Float64}(I, 3, 3)
 ````
 
 ````
-3×3 Matrix{Float64}:
- 1.0  0.0  0.0
- 0.0  1.0  0.0
- 0.0  0.0  1.0
+3×3 Matrix{Bool}:
+ 1  0  0
+ 0  1  0
+ 0  0  1
 ````
 
 ## Question 012
@@ -280,12 +280,12 @@ mA = randn(2, 2, 2)
 ````
 2×2×2 Array{Float64, 3}:
 [:, :, 1] =
-  2.14651   -0.501326
- -0.235638   0.423397
+ -0.00688744  1.26975
+ -0.426375    0.670968
 
 [:, :, 2] =
- -1.01375   -1.01331
-  0.769972   0.585835
+ -0.16388  0.331365
+ -1.16542  0.838834
 ````
 
 ## Question 013
@@ -294,17 +294,28 @@ Create a 5x5 array with random values and find the minimum and maximum values. (
 ````julia
 mA = rand(5, 5);
 minVal = minimum(mA)
+````
+
+````
+0.029284794001999348
+````
+
+````julia
 maxVal = maximum(mA)
 ````
 
 ````
-0.926918933133886
+0.957107705235006
 ````
 
-Using `extrema` one could get both values at once:
+Using `extrema()` one could get both values at once:
 
 ````julia
-minVal, maxVal = extrema(mA);
+minVal, maxVal = extrema(mA)
+````
+
+````
+(0.029284794001999348, 0.957107705235006)
 ````
 
 ## Question 014
@@ -315,7 +326,7 @@ meanVal = mean(randn(30))
 ````
 
 ````
-0.612791401222937
+-0.08163189222901915
 ````
 
 ## Question 015
