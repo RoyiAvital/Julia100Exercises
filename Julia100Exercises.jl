@@ -366,3 +366,86 @@ vA = LinRange(0, 1, 12)[2:(end - 1)]
 
 vA = rand(1:10, 10);
 sort(vA)
+
+# ## Question 041
+# Implement the `sum()` function manually. (★★☆)
+
+vA = rand(100);
+sumVal = vA[1]
+for ii in 2:length(vA)
+    global sumVal += vA[ii];
+end
+
+# ## Question 042
+# Check for equality of 2 arrays. (★★☆)
+
+vA = rand(10);
+vB = rand(10);
+
+all(vA .== vB)
+
+# ## Question 043
+# Make an array immutable (Read only). (★★☆)
+
+# This is a work in progress for Julia at in [Issue 31630](https://github.com/JuliaLang/julia/pull/31630).
+
+# ## Question 044
+# Consider a random `10x2` matrix representing cartesian coordinates, convert them to polar coordinates. (★★☆)
+
+mA = rand(10, 2);
+
+ConvToPolar = vX -> [hypot(vX[1], vX[2]), atan(vX[2], vX[1])]
+
+mB = [ConvToPolar(vX) for vX in eachrow(mA)]
+
+# ## Question 045
+# Create random vector of size 10 and replace the maximum value by 0. (★★☆)
+
+vA = randn(10);
+vA[argmax(vA)] = 0;
+vA
+
+# ## Question 046
+# Create a a grid of `x` and `y` coordinates covering the `[0, 1] x [0, 1]` area. (★★☆)
+
+numGridPts = 5;
+vX = LinRange(0, 1, numGridPts);
+vY = LinRange(0, 1, numGridPts);
+MeshGrid = (vX, vY) -> ([x for _ in vY, x in vX], [y for y in vY, _ in vX]);
+
+mX, mY = MeshGrid(vX, vY); #<! See https://discourse.julialang.org/t/48679
+@show mX
+#+
+@show mY
+
+# ## Question 047
+# Given two vectors, `vX`` and `vY``, construct the Cauchy matrix `mC`: `(Cij = 1 / (xi - yj))`. (★★☆)
+
+vX = rand(5);
+vY = rand(5);
+
+mC = 1 ./ (vX .- vY')
+
+# ## Question 048
+# Print the minimum and maximum representable value for each Julia scalar type. (★★☆)
+
+vT = [UInt8 UInt16 UInt32 UInt64 Int8 Int16 Int32 Int64 Float16 Float32 Float64]
+
+for juliaType in vT
+    println(typemin(juliaType));
+    println(typemax(juliaType));
+end
+
+# ## Question 049
+# Print all the values of an array. (★★☆)
+
+mA = rand(3, 3);
+print(mA);
+
+# ## Question 050
+# Find the closest value to a given scalar in a vector. (★★☆)
+
+inputVal = 0.5;
+vA = rand(10);
+
+vA[argmin(abs.(vA .- inputVal))]
