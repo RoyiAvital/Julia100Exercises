@@ -81,7 +81,7 @@ reverse!(vA);
 vA
 
 # ## Question 009
-# Create a 3x3 matrix with values ranging from 0 to 8. (★☆☆)
+# Create a `3x3` matrix with values ranging from 0 to 8. (★☆☆)
 
 mA = reshape(0:8, 3, 3)
 
@@ -91,7 +91,7 @@ mA = Matrix{Float64}(undef, 3, 3);
 mA[:] = 0:8;
 
 # ## Question 010
-# Find indices of non-zero elements from `[1, 2, 0, 0, 4, 0]`. (★☆☆)
+# Find indices of non zero elements from `[1, 2, 0, 0, 4, 0]`. (★☆☆)
 
 findall(!iszero, [1, 2, 0, 0, 4, 0])
 
@@ -105,12 +105,12 @@ mA = I(3)
 mA = Matrix(I, 3, 3) #<! For Float64: Matrix{Float64}(I, 3, 3)
 
 # ## Question 012
-# Create a 2x2x2 array with random values. (★☆☆)
+# Create a `2x2x2` array with random values. (★☆☆)
 
 mA = randn(2, 2, 2)
 
 # ## Question 013
-# Create a 5x5 array with random values and find the minimum and maximum values. (★☆☆)
+# Create a `5x5` array with random values and find the minimum and maximum values. (★☆☆)
 
 mA = rand(5, 5);
 minVal = minimum(mA)
@@ -167,12 +167,12 @@ NaN in [NaN]
 0.3 == 3 * 0.1
 
 # ## Question 018
-# Create a 5x5 matrix with values [1, 2, 3, 4] just below the diagonal. (★☆☆)
+# Create a `5x5` matrix with values `[1, 2, 3, 4]` just below the diagonal. (★☆☆)
 
 mA = diagm(5, 5, -1 => 1:4)
 
 # ## Question 019
-# Create a 8x8 matrix and fill it with a checkerboard pattern. (★☆☆)
+# Create a `8x8` matrix and fill it with a checkerboard pattern. (★☆☆)
 
 mA = zeros(8, 8);
 mA[2:2:end, 1:2:end] .= 1;
@@ -180,9 +180,111 @@ mA[1:2:end, 2:2:end] .= 1;
 mA
 
 # ## Question 020
-# Convert the linear index 100 to a _Cartesian Index_ of a size (6,7,8). (★☆☆)
+# Convert the linear index 100 to a _Cartesian Index_ of a size `(6,7,8)`. (★☆☆)
 
 mA = rand(6, 7, 8);
 cartIdx = CartesianIndices(mA)[100]; #<! See https://discourse.julialang.org/t/14666
 mA[cartIdx] == mA[100]
 
+# ## Question 021
+# Create a checkerboard `8x8` matrix using the `repeat()` function. (★☆☆)
+
+mA = repeat([0 1; 1 0], 4, 4)
+
+# ## Question 022
+# Normalize a `4x4` random matrix. (★☆☆)
+
+mA = rand(4, 4);
+mA .= (mA .- mean(mA)) ./ std(mA) #<! Pay attention that `@.` will yield error (`std()` and `mean()`)
+
+# ## Question 023
+# Create a custom type that describes a color as four unsigned bytes (`RGBA`). (★☆☆)
+
+mutable struct sColor
+    R::UInt8;
+    G::UInt8;
+    B::UInt8;
+    A::UInt8;
+end
+
+sMyColor = sColor(rand(UInt8, 4)...)
+
+# ## Question 024
+# Multiply a `2x4` matrix by a `4x3` matrix. (★☆☆)
+
+mA = rand(2, 4) * randn(4, 3)
+
+# ## Question 025
+# Given a 1D array, negate all elements which are between 3 and 8, in place. (★☆☆)
+
+vA = rand(1:10, 8);
+map!(x -> ((x > 3) && (x < 8)) ? -x : x, vA, vA)
+
+# Using logical indices one could use:
+
+vA[3 .< vA .< 8] .*= -1;
+
+# ## Question 026
+# Sum the array `1:4` with initial value of -10. (★☆☆)
+
+sum(1:4, init = -10)
+
+# ## Question 027
+# Consider an integer vector `vZ` validate the following expressions. (★☆☆)
+# ```julia
+# vZ .^ vZ
+# 2 << vZ >> 2
+# vZ <- vZ
+# 1im * vZ
+# vZ / 1 / 1
+# vZ < Z > Z
+# ```
+
+vZ = rand(1:10, 3);
+#+
+vZ .^ vZ
+#+
+try
+    2 << vZ >> 2
+catch e
+    println(e)
+end
+#+
+vZ <- vZ
+#+
+1im * vZ
+#+
+vZ / 1 / 1
+#+
+vZ < vZ > vZ
+
+# ## Question 028
+# Evaluate the following expressions. (★☆☆)
+
+[0] ./ [0]
+#+
+try
+    [0] .÷ [0]
+catch e
+    println(e)
+end
+#+
+try
+    convert(Float, convert(Int, NaN))
+catch e
+    println(e)
+end
+
+# ## Question 029
+# Round away from zero a float array. (★☆☆)
+
+vA = randn(10);
+map(x -> x > 0 ? ceil(x) : floor(x), vA)
+
+# ## Question 030
+# Find common values between two arrays. (★☆☆)
+
+vA = rand(1:10, 6);
+vB = rand(1:10, 6);
+
+vA[findall(in(vB), vA)]

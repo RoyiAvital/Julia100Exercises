@@ -49,16 +49,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 4.0e-323
- 1.025902017e-315
- 4.4e-323
- 1.02590929e-315
- 5.0e-323
- 1.025916563e-315
- 5.4e-323
- 1.025921464e-315
- 1.00523885e-315
- 1.005239164e-315
+ 1.11408467e-315
+ 1.02038532e-315
+ 1.111645885e-315
+ 1.0117010135e-314
+ 9.942418403e-315
+ 9.94241864e-315
+ 9.942418877e-315
+ 1.112690616e-315
+ 1.112690933e-315
+ 1.11269125e-315
 ````
 
 Which is equivalent of
@@ -69,16 +69,16 @@ vA = Array{Float64, 1}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.003011205e-315
- 1.004521386e-315
- 1.00504881e-315
- 1.00508549e-315
- 9.72970196e-316
- 9.72970433e-316
- 9.7297067e-316
- 1.00508296e-315
- 1.005083277e-315
- 1.005083593e-315
+ 1.11408467e-315
+ 1.02038532e-315
+ 1.111645885e-315
+ 1.0117010135e-314
+ 9.942418403e-315
+ 9.94241864e-315
+ 9.942418877e-315
+ 1.112690616e-315
+ 1.112690933e-315
+ 1.11269125e-315
 ````
 
 ## Question 004
@@ -209,7 +209,7 @@ vA
 ````
 
 ## Question 009
-Create a 3x3 matrix with values ranging from 0 to 8. (★☆☆)
+Create a `3x3` matrix with values ranging from 0 to 8. (★☆☆)
 
 ````julia
 mA = reshape(0:8, 3, 3)
@@ -230,7 +230,7 @@ mA[:] = 0:8;
 ````
 
 ## Question 010
-Find indices of non-zero elements from `[1, 2, 0, 0, 4, 0]`. (★☆☆)
+Find indices of non zero elements from `[1, 2, 0, 0, 4, 0]`. (★☆☆)
 
 ````julia
 findall(!iszero, [1, 2, 0, 0, 4, 0])
@@ -271,7 +271,7 @@ mA = Matrix(I, 3, 3) #<! For Float64: Matrix{Float64}(I, 3, 3)
 ````
 
 ## Question 012
-Create a 2x2x2 array with random values. (★☆☆)
+Create a `2x2x2` array with random values. (★☆☆)
 
 ````julia
 mA = randn(2, 2, 2)
@@ -280,16 +280,16 @@ mA = randn(2, 2, 2)
 ````
 2×2×2 Array{Float64, 3}:
 [:, :, 1] =
- -0.824974   0.306325
- -0.321809  -0.670402
+ 1.16694   1.35242
+ 0.527739  0.836723
 
 [:, :, 2] =
- 1.12201    2.18472
- 0.424839  -0.231148
+  0.636307   0.125255
+ -0.337548  -1.45923
 ````
 
 ## Question 013
-Create a 5x5 array with random values and find the minimum and maximum values. (★☆☆)
+Create a `5x5` array with random values and find the minimum and maximum values. (★☆☆)
 
 ````julia
 mA = rand(5, 5);
@@ -297,7 +297,7 @@ minVal = minimum(mA)
 ````
 
 ````
-0.033381047234593675
+0.11627165339593515
 ````
 
 ````julia
@@ -305,7 +305,7 @@ maxVal = maximum(mA)
 ````
 
 ````
-0.9916978050936363
+0.9856597266425426
 ````
 
 Using `extrema()` one could get both values at once:
@@ -322,7 +322,7 @@ meanVal = mean(randn(30))
 ````
 
 ````
--0.22913812562356647
+-0.31276232069197635
 ````
 
 ## Question 015
@@ -428,7 +428,7 @@ false
 ````
 
 ## Question 018
-Create a 5x5 matrix with values [1, 2, 3, 4] just below the diagonal. (★☆☆)
+Create a `5x5` matrix with values `[1, 2, 3, 4]` just below the diagonal. (★☆☆)
 
 ````julia
 mA = diagm(5, 5, -1 => 1:4)
@@ -444,7 +444,7 @@ mA = diagm(5, 5, -1 => 1:4)
 ````
 
 ## Question 019
-Create a 8x8 matrix and fill it with a checkerboard pattern. (★☆☆)
+Create a `8x8` matrix and fill it with a checkerboard pattern. (★☆☆)
 
 ````julia
 mA = zeros(8, 8);
@@ -466,7 +466,7 @@ mA
 ````
 
 ## Question 020
-Convert the linear index 100 to a _Cartesian Index_ of a size (6,7,8). (★☆☆)
+Convert the linear index 100 to a _Cartesian Index_ of a size `(6,7,8)`. (★☆☆)
 
 ````julia
 mA = rand(6, 7, 8);
@@ -476,6 +476,261 @@ mA[cartIdx] == mA[100]
 
 ````
 true
+````
+
+## Question 021
+Create a checkerboard `8x8` matrix using the `repeat()` function. (★☆☆)
+
+````julia
+mA = repeat([0 1; 1 0], 4, 4)
+````
+
+````
+8×8 Matrix{Int64}:
+ 0  1  0  1  0  1  0  1
+ 1  0  1  0  1  0  1  0
+ 0  1  0  1  0  1  0  1
+ 1  0  1  0  1  0  1  0
+ 0  1  0  1  0  1  0  1
+ 1  0  1  0  1  0  1  0
+ 0  1  0  1  0  1  0  1
+ 1  0  1  0  1  0  1  0
+````
+
+## Question 022
+Normalize a `4x4` random matrix. (★☆☆)
+
+````julia
+mA = rand(4, 4);
+mA .= (mA .- mean(mA)) ./ std(mA) #<! Pay attention that `@.` will yield error (`std()` and `mean()`)
+````
+
+````
+4×4 Matrix{Float64}:
+  1.90873    0.380382  -0.213327   0.709524
+  0.845878  -0.899811   0.126485   1.07044
+ -0.539166  -0.948521  -0.659701  -1.68479
+ -1.02982   -0.38057   -0.192279   1.50654
+````
+
+## Question 023
+Create a custom type that describes a color as four unsigned bytes (`RGBA`). (★☆☆)
+
+````julia
+mutable struct sColor
+    R::UInt8;
+    G::UInt8;
+    B::UInt8;
+    A::UInt8;
+end
+
+sMyColor = sColor(rand(UInt8, 4)...)
+````
+
+````
+Main.##342.sColor(0xbb, 0x77, 0x41, 0xce)
+````
+
+## Question 024
+Multiply a `2x4` matrix by a `4x3` matrix. (★☆☆)
+
+````julia
+mA = rand(2, 4) * randn(4, 3)
+````
+
+````
+2×3 Matrix{Float64}:
+ -0.762299   0.316353  0.782141
+  0.493932  -0.198625  0.0322498
+````
+
+## Question 025
+Given a 1D array, negate all elements which are between 3 and 8, in place. (★☆☆)
+
+````julia
+vA = rand(1:10, 8);
+map!(x -> ((x > 3) && (x < 8)) ? -x : x, vA, vA)
+````
+
+````
+8-element Vector{Int64}:
+  1
+  2
+  9
+ -7
+ -5
+ -6
+  3
+  1
+````
+
+Using logical indices one could use:
+
+````julia
+vA[3 .< vA .< 8] .*= -1;
+````
+
+## Question 026
+Sum the array `1:4` with initial value of -10. (★☆☆)
+
+````julia
+sum(1:4, init = -10)
+````
+
+````
+0
+````
+
+## Question 027
+Consider an integer vector `vZ` validate the following expressions. (★☆☆)
+```julia
+vZ .^ vZ
+2 << vZ >> 2
+vZ <- vZ
+1im * vZ
+vZ / 1 / 1
+vZ < Z > Z
+```
+
+````julia
+vZ = rand(1:10, 3);
+````
+
+````julia
+vZ .^ vZ
+````
+
+````
+3-element Vector{Int64}:
+ 10000000000
+         256
+          27
+````
+
+````julia
+try
+    2 << vZ >> 2
+catch e
+    println(e)
+end
+````
+
+````
+MethodError(<<, (2, [10, 4, 3]), 0x0000000000007b71)
+
+````
+
+````julia
+vZ <- vZ
+````
+
+````
+false
+````
+
+````julia
+1im * vZ
+````
+
+````
+3-element Vector{Complex{Int64}}:
+ 0 + 10im
+ 0 + 4im
+ 0 + 3im
+````
+
+````julia
+vZ / 1 / 1
+````
+
+````
+3-element Vector{Float64}:
+ 10.0
+  4.0
+  3.0
+````
+
+````julia
+vZ < vZ > vZ
+````
+
+````
+false
+````
+
+## Question 028
+Evaluate the following expressions. (★☆☆)
+
+````julia
+[0] ./ [0]
+````
+
+````
+1-element Vector{Float64}:
+ NaN
+````
+
+````julia
+try
+    [0] .÷ [0]
+catch e
+    println(e)
+end
+````
+
+````
+DivideError()
+
+````
+
+````julia
+try
+    convert(Float, convert(Int, NaN))
+catch e
+    println(e)
+end
+````
+
+````
+InexactError(:Int64, Int64, NaN)
+
+````
+
+## Question 029
+Round away from zero a float array. (★☆☆)
+
+````julia
+vA = randn(10);
+map(x -> x > 0 ? ceil(x) : floor(x), vA)
+````
+
+````
+10-element Vector{Float64}:
+ -2.0
+  1.0
+  2.0
+  1.0
+  4.0
+  3.0
+ -1.0
+  1.0
+ -1.0
+ -1.0
+````
+
+## Question 030
+Find common values between two arrays. (★☆☆)
+
+````julia
+vA = rand(1:10, 6);
+vB = rand(1:10, 6);
+
+vA[findall(in(vB), vA)]
+````
+
+````
+1-element Vector{Int64}:
+ 7
 ````
 
 ---
