@@ -142,7 +142,7 @@ mA[2:(end - 1), 2:(end - 1)] .= 0;
 # Using one line code:
 
 mA = zeros(4, 5);
-mA[[LinearIndices(mA)[a] for a in CartesianIndices(mA) if (any(a.I .== 1) || a.I[1] == size(mA, 1) || a.I[2] == size(mA, 2))]] .= 1;
+mA[[LinearIndices(mA)[cartIdx] for cartIdx in CartesianIndices(mA) if (any(cartIdx.I .== 1) || cartIdx.I[1] == size(mA, 1) || cartIdx.I[2] == size(mA, 2))]] .= 1;
 
 # ## Question 016
 # Add a border of zeros around the array. (★☆☆)
