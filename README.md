@@ -17,6 +17,7 @@ Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavo
 
 ````julia
 using Literate;
+using LinearAlgebra;
 using Statistics;
 ````
 
@@ -24,25 +25,19 @@ using Statistics;
 Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
 
 ````julia
-import LinearAlgebra as LA
-````
-
-The above is equivalent of
-
-````julia
-using LinearAlgebra
-const LA = LinearAlgebra;
+import LinearAlgebra as LA;
 ````
 
 ## Question 002
 Print the version of Julia. (★☆☆)
 
 ````julia
-VERSION
+println(VERSION);
 ````
 
 ````
-v"1.7.2"
+1.7.2
+
 ````
 
 ## Question 003
@@ -54,16 +49,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.007131317e-315
- 1.06213276e-315
- 1.05599291e-315
- 1.062160586e-315
- 1.007133926e-315
- 1.007134163e-315
- 1.0071344e-315
- 1.06215774e-315
- 1.062158056e-315
- 1.06215869e-315
+ 1.5e-323
+ 1.6e-322
+ 6.9525322588186e-310
+ 4.94e-322
+ 4.94e-321
+ 1.235e-321
+ 1.0e-322
+ 1.5e-323
+ 1.6e-322
+ 2.0e-323
 ````
 
 Which is equivalent of
@@ -74,16 +69,16 @@ vA = Array{Float64, 1}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 1.06248564e-315
- 1.06371124e-315
- 1.06382539e-315
- 1.06386049e-315
- 1.01249529e-315
- 1.012495526e-315
- 1.012495764e-315
- 1.06385764e-315
- 1.06385796e-315
- 1.063858275e-315
+ 1.5e-323
+ 1.6e-322
+ 6.9525322588186e-310
+ 4.94e-322
+ 4.94e-321
+ 1.235e-321
+ 1.0e-322
+ 1.5e-323
+ 1.6e-322
+ 2.0e-323
 ````
 
 ## Question 004
@@ -285,12 +280,12 @@ mA = randn(2, 2, 2)
 ````
 2×2×2 Array{Float64, 3}:
 [:, :, 1] =
- -0.461942  -0.0991088
-  2.12957   -0.248355
+  2.14651   -0.501326
+ -0.235638   0.423397
 
 [:, :, 2] =
- 0.396743  -0.897117
- 0.982021  -0.935146
+ -1.01375   -1.01331
+  0.769972   0.585835
 ````
 
 ## Question 013
@@ -303,7 +298,7 @@ maxVal = maximum(mA)
 ````
 
 ````
-0.997261216230553
+0.926918933133886
 ````
 
 Using `extrema` one could get both values at once:
@@ -320,7 +315,7 @@ meanVal = mean(randn(30))
 ````
 
 ````
--0.016801216176517284
+0.612791401222937
 ````
 
 ## Question 015
@@ -348,7 +343,7 @@ mA = ones(4, 5);
 mA[2:(end - 1), 2:(end - 1)] .= 0;
 ````
 
-Using one line code (For square matrix):
+Using one line code:
 
 ````julia
 mA = zeros(4, 5);

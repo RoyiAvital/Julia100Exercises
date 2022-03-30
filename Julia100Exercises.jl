@@ -16,22 +16,18 @@
 # **Remark**: Tested with Julia `1.7.2`.
 
 using Literate;
+using LinearAlgebra;
 using Statistics;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
 
-import LinearAlgebra as LA
-
-# The above is equivalent of
-
-using LinearAlgebra
-const LA = LinearAlgebra;
+import LinearAlgebra as LA;
 
 # ## Question 002
 # Print the version of Julia. (★☆☆)
 
-VERSION
+println(VERSION);
 
 # ## Question 003
 # Create a non initialized vector of size 10 of `Float64`. (★☆☆)
