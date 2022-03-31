@@ -201,7 +201,7 @@ mA .= (mA .- mean(mA)) ./ std(mA) #<! Pay attention that `@.` will yield error (
 # ## Question 023
 # Create a custom type that describes a color as four unsigned bytes (`RGBA`). (★☆☆)
 
-mutable struct sColor
+struct sColor
     R::UInt8;
     G::UInt8;
     B::UInt8;
@@ -449,3 +449,33 @@ inputVal = 0.5;
 vA = rand(10);
 
 vA[argmin(abs.(vA .- inputVal))]
+
+# ## Question 051
+# Create a structured array representing a position `(x, y)` and a color `(r, g, b)`. (★★☆)
+
+struct sPosColor
+    x::Int
+    y::Int
+    R::UInt8;
+    G::UInt8;
+    B::UInt8;
+    A::UInt8;
+end
+
+numPixels   = 10;
+maxVal      = typemax(UInt32);
+vMyColor    = [sPosColor(rand(1:maxVal, 2)..., rand(UInt8, 4)...) for _ in 1:numPixels];
+
+# ## Question 052
+# Consider a random vector with shape `(5, 2)` representing coordinates, find the distances matrix `mD`: $ {D}_{i, j} = {\left\| {x}_{i} - {x}_{j} \right\|}_{2} $. (★★☆)
+
+mX = rand(5, 2);
+vSumSqr = sum(vX -> vX .^ 2, mX, dims = 2);
+mD = vSumSqr .+ vSumSqr' - 2 * (mX * mX');
+mD
+
+# ## Question 053
+# Convert a float (32 bits) array into an integer (32 bits) in place. (★★☆)
+
+vA = 100 .* rand(Float32, 5);
+vA .= round.(Int32, vA)
