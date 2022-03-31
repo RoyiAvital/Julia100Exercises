@@ -19,6 +19,9 @@ using Literate;
 using LinearAlgebra;
 using Statistics;
 using Dates;
+using DelimitedFiles;
+using UnicodePlots;
+using Random;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
@@ -479,3 +482,71 @@ mD
 
 vA = 100 .* rand(Float32, 5);
 vA .= round.(Int32, vA)
+
+# ## Question 054
+# Read the following file (`Q0054.txt`). (★★☆)
+# ```
+# 1, 2, 3, 4, 5
+# 6,  ,  , 7, 8
+#  ,  , 9,10,11
+# ```
+
+mA = readdlm("Q0054.txt", ',')
+
+# ## Question 055
+# Enumerate array in a loop. (★★☆)
+
+mA = rand(3, 3);
+
+for (elmIdx, elmVal) in enumerate(mA) #<! See https://discourse.julialang.org/t/48877
+    println(elmIdx);
+    println(elmVal);
+end
+
+# ## Question 056
+# Generate a generic 2D Gaussian like array with `μ = 0`, `σ = 1` and indices over `{-5, -4, ..., 0, 1, ..., 5}`. (★★☆)
+
+vA = -5:5;
+μ = 0;
+σ = 1;
+mG = [(1 / (2 * pi * σ)) * exp(-0.5 * ((([x, y] .- μ)' * ([x, y] .- μ)) / (σ * σ))) for x in vA, y in vA];
+
+heatmap(mG)
+
+# Using the separability of the Gaussian function:
+
+vG = (1 / (sqrt(2 * pi) * σ)) .* exp.(-0.5 .* (((vA .- μ) .^ 2) / (σ * σ)));
+mG = vG * vG';
+
+# ## Question 057
+# Place `5` elements in a `5x5` array randomly. (★★☆)
+
+mA = rand(5, 5);
+mA[rand(1:25, 5)] = rand(5);
+
+# Another option which avoids setting into the same indices:
+mA[randperm(25)[1:5]] = rand(5);
+
+# ## Question 058
+# Subtract the mean of each row of a matrix. (★★☆)
+
+mA = rand(3, 3);
+mA .-= mean(mA, dims = 2);
+mean(mA, dims = 1)
+
+# ## Question 059
+# Sort an array by a column. (★★☆)
+
+colIdx = 2;
+
+mA = rand(3, 3);
+mA[sortperm(mA[:, colIdx]), :]
+
+# Using `sortslices()`:
+sortslices(mA, dims = 1, by = x -> x[colIdx]);
+
+# ## Question 060
+# Tell if a given 2D array has null (All zeros) columns. (★★☆)
+
+mA = rand(0:1, 3, 9);
+any(all(iszero.(mA), dims = 1))
