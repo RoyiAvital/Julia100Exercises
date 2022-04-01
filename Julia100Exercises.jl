@@ -375,6 +375,7 @@ sort(vA)
 
 vA = rand(100);
 sumVal = vA[1]
+## Using `global` for scope in Literate
 for ii in 2:length(vA)
     global sumVal += vA[ii];
 end
@@ -550,3 +551,160 @@ sortslices(mA, dims = 1, by = x -> x[colIdx]);
 
 mA = rand(0:1, 3, 9);
 any(all(iszero.(mA), dims = 1))
+
+# ## Question 061
+# Find the 2nd nearest value from a given value in an array. (★★☆)
+
+inputVal = 0.5;
+vA = rand(10);
+
+vA[sortperm(abs.(vA .- inputVal))[2]]
+
+# Alternative way (More efficient)
+
+closeFirst  = Inf;
+closeSecond = Inf;
+closeFirstIdx  = 0;
+closeSecondIdx = 0;
+
+## Using `global` for scope in Literate
+for (elmIdx, elmVal) in enumerate(abs.(vA .- inputVal))
+    if (elmVal < closeFirst)
+        global closeSecond = closeFirst;
+        global closeFirst = elmVal;
+        global closeSecondIdx  = closeFirstIdx;
+        global closeFirstIdx   = elmIdx;
+    elseif (elmVal < closeSecond)
+        global closeSecond = elmVal;
+        global closeSecondIdx = elmIdx;
+    end
+end
+
+vA[closeSecondIdx] == vA[sortperm(abs.(vA .- inputVal))[2]]
+
+# ## Question 062
+# Considering two arrays with shape `(1, 3)` and `(3, 1)`, Compute their sum using an iterator. (★★☆)
+
+vA = rand(1, 3);
+vB = rand(3, 1);
+
+sum([aVal + bVal for aVal in vA, bVal in vB])
+
+# ## Question 063
+# Create an array class that has a name attribute. (★★☆)
+#+
+# One could use `NamedArrays.jl` or `AxisArrays.jl`.
+
+# ## Question 064
+# Given a vector, add `1` to each element indexed by a second vector (Be careful with repeated indices). (★★★)
+
+vA = rand(1:10, 5);
+vB = rand(1:5, 3);
+
+println(vA);
+
+## Julia is very efficient with loops
+for bIdx in vB
+    vA[bIdx] += 1;
+end
+
+println(vA);
+
+# ## Question 065
+# Accumulate elements of a vector `X` to an array `F` based on an index list `I`. (★★★)
+
+vX = rand(1:5, 10);
+vI = rand(1:15, 10);
+
+numElements = maximum(vI);
+vF = zeros(numElements);
+
+for (ii, iIdx) in enumerate(vI)
+    vF[iIdx] += vX[ii];
+end
+
+println("vX: $vX");
+println("vI: $vI");
+println("vF: $vF");
+
+# One could also use `counts()` from `StatsBase.jl`.
+
+# ## Question 066
+# Considering an image of size `w x h x 3` image of type `UInt8`, compute the number of unique colors. (★★☆)
+
+mI = rand(UInt8, 1000, 1000, 3);
+
+numColors = length(unique([reinterpret(UInt32, [iPx[1], iPx[2], iPx[3], 0x00])[1] for iPx in eachrow(reshape(mI, :, 3))]));
+print("Number of Unique Colors: $numColors");
+
+# Another option:
+
+numColors = length(unique([UInt32(iPx[1]) + UInt32(iPx[2]) << 8 + UInt32(iPx[3]) << 16 for iPx in eachrow(reshape(mI, :, 3))]));
+print("Number of Unique Colors: $numColors");
+
+# ## Question 067
+# Considering a three dimensions array, get sum over the last two axis at once. (★★★)
+
+mA = rand(2, 2, 2, 2);
+sum(reshape(mA, (2, 2, :)), dims = 3)
+
+# ## Question 068
+# Considering a one dimensional vector `vA`, how to compute means of subsets of `vA` using a vector `vS` of same size describing subset indices. (★★★)
+
+## Bascially extending `Q0065` with another vector of number of additions.
+
+vX = rand(1:5, 10);
+vI = rand(1:15, 10);
+
+numElements = maximum(vI);
+vF = zeros(numElements);
+vN = zeros(Int, numElements);
+
+for (ii, iIdx) in enumerate(vI)
+    vF[iIdx] += vX[ii];
+    vN[iIdx] += 1;
+end
+
+## We only divide the mean if the number of elements accumulated is bigger than 1
+for ii in 1:numElements
+    vF[ii] = ifelse(vN[ii] > 1, vF[ii] / vN[ii], vF[ii]);
+end
+
+println("vX: $vX");
+println("vI: $vI");
+println("vF: $vF");
+
+# ## Question 069
+# Get the diagonal of a matrix product. (★★★)
+
+mA = rand(5, 7);
+mB = rand(7, 4);
+
+numDiagElements = min(size(mA, 1), size(mB, 2));
+vD = [dot(mA[ii, :], mB[:, ii]) for ii in 1:numDiagElements]
+
+# Alternative way:
+
+vD = reshape(sum(mA[1:numDiagElements, :]' .* mB[:, 1:numDiagElements], dims = 1), numDiagElements)
+
+# ## Question 070
+# Consider the vector `[1, 2, 3, 4, 5]`, build a new vector with 3 consecutive zeros interleaved between each value. (★★★)
+
+vA = 1:5;
+
+## Since Julia is fast with loops, it would be the easiest choice
+
+numElements = (4 * length(vA)) - 3;
+vB = zeros(Int, numElements);
+
+for (ii, bIdx) in enumerate(1:4:numElements)
+    vB[bIdx] = vA[ii];
+end
+println(vB);
+
+## Alternative (MATLAB style) way:
+
+mB = [reshape(collect(vA), 1, :); zeros(Int, 3, length(vA))];
+vB = reshape(mB[1:(end - 3)], :);
+println(vB);
+
