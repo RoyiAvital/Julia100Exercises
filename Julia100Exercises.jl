@@ -708,3 +708,152 @@ mB = [reshape(collect(vA), 1, :); zeros(Int, 3, length(vA))];
 vB = reshape(mB[1:(end - 3)], :);
 println(vB);
 
+# ## Question 071
+# Consider an array of dimension `5 x 5 x 3`, mulitply it by an array with dimensions `5 x 5` using broadcasting. (★★★)
+
+mA = rand(5, 5, 3);
+mB = rand(5, 5);
+
+mA .* mB #<! Very easy in Julia
+
+# ## Question 072
+# Swap two rows of a 2D array. (★★★)
+
+mA = rand(UInt8, 3, 2);
+println(mA);
+mA[[1, 2], :] .= mA[[2, 1], :];
+println(mA);
+
+# ## Question 073
+# Consider a set of 10 triplets describing 10 triangles (with shared vertices), find the set of unique line segments composing all the triangles. (★★★)
+
+# TODO: Need to understand the question.
+
+# ## Question 074
+# Given a sorted array `vC` that corresponds to a bincount, produce an array `vA` such that `bincount(vA) == vC`. (★★★)
+
+vC = rand(0:7, 5);
+numElements = sum(vC);
+vA = zeros(Int, numElements);
+
+elmIdx = 1;
+## Using `global` for scope in Literate
+for (ii, binCount) in enumerate(vC)
+    for jj in 1:binCount
+        vA[elmIdx] = ii;
+        global elmIdx += 1;
+    end
+end
+
+# ## Question 075
+# Compute averages using a sliding window over an array. (★★★)
+
+numElements = 10;
+winRadius   = 1;
+winReach    = 2 * winRadius;
+winLength   = 1 + winReach;
+
+vA = rand(0:3, numElements);
+vB = zeros(numElements - (2 * winRadius));
+
+aIdx = 1 + winRadius;
+## Using `global` for scope in Literate
+for ii in 1:length(vB)
+    vB[ii] = mean(vA[(aIdx - winRadius):(aIdx + winRadius)]); #<! Using integral / running sum it would be faster.
+    global aIdx += 1;
+end
+
+# Another method using running sum:
+
+vC = zeros(numElements - winReach);
+
+jj = 1;
+sumVal = sum(vA[1:winLength]);
+vC[jj] = sumVal / winLength;
+jj += 1;
+
+## Using `global` for scope in Literate
+for ii in 2:(numElements - winReach)
+    global sumVal += vA[ii + winReach] - vA[ii - 1];
+    vC[jj] = sumVal / winLength;
+    global jj += 1;
+end
+
+maximum(abs.(vC - vB)) < 1e-8
+
+# ## Question 076
+#  Consider a one dimensional array `vA`, build a two dimensional array whose first row is `[ vA[0], vA[1], vA[2] ]`  and each subsequent row is shifted by 1. (★★★)
+
+vA = rand(10);
+numCols = 3;
+
+numRows = length(vA) - numCols + 1;
+mA = zeros(numRows, numCols);
+
+for ii in 1:numRows
+    mA[ii, :] = vA[ii:(ii + numCols - 1)]; #<! One could optimize the `-1` out
+end
+
+# ## Question 077
+#  Negate a boolean or to change the sign of a float inplace. (★★★)
+
+vA = rand(Bool, 10);
+vA .= .!vA;
+
+vA = randn(10);
+vA .*= -1;
+
+# ## Question 078
+#  Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a point `vP`, how to compute distance from the point `vP` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+
+## See distance of a point from a line in Wikipedia (https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line).  
+## Specifically _Line Defined by Two Points_.
+
+numLines = 10;
+mP1 = randn(numLines, 2);
+mP2 = randn(numLines, 2);
+vP  = randn(2);
+
+vD = [(abs(((vP2[1] - vP1[1]) * (vP1[2] - vP[2])) - ((vP1[1] - vP[1]) * (vP2[2] - vP1[2]))) / hypot((vP2 - vP1)...)) for (vP1, vP2) in zip(eachrow(mP1), eachrow(mP2))];
+minDist = minimum(vD);
+
+println("Min Distance: $minDist");
+
+# ## Question 079
+#  Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a set of points `mP`, how to compute distance from the point `vP = mP[j, :]` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+
+numLines = 5;
+mP1 = randn(numLines, 2);
+mP2 = randn(numLines, 2);
+mP  = randn(numLines, 2);
+
+mD = [(abs(((vP2[1] - vP1[1]) * (vP1[2] - vP[2])) - ((vP1[1] - vP[1]) * (vP2[2] - vP1[2]))) / hypot((vP2 - vP1)...)) for (vP1, vP2) in zip(eachrow(mP1), eachrow(mP2)), vP in eachrow(mP)];
+
+for jj in 1:numLines
+    minDist = minimum(mD[jj, :]);
+    println("The minimum distance from the $jj -th point: $minDist");
+end
+
+# ## Question 080
+#  Consider an arbitrary 2D array, write a function that extract a subpart with a fixed shape and centered on a given element (Handel out of bounds). (★★★)
+
+## One could use `PaddedViews.jl` to easily solve this.
+
+arrayLength = 10;
+winRadius   = 3;
+vWinCenter  = [7, 9];
+
+mA = rand(arrayLength, arrayLength);
+winLength = (2 * winRadius) + 1;
+mB = zeros(winLength, winLength);
+
+verShift = -winRadius;
+## Using `global` for scope in Literate
+for ii in 1:winLength
+    horShift = -winRadius;
+    for jj in 1:winLength
+        mB[ii, jj] = mA[min(max(vWinCenter[1] + verShift, 1), arrayLength), min(max(vWinCenter[2] + horShift, 1), arrayLength)]; #<! Nearest neighbor extrapolation
+        horShift += 1;
+    end
+    global verShift += 1;
+end

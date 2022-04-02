@@ -53,16 +53,16 @@ vA = Vector{Float64}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 0.0
- 1.39751274e-315
- 1.768101185e-315
- 0.0
- 1.39751274e-315
- 1.41422718e-315
- 0.0
- 1.39751274e-315
- 1.768099683e-315
- 0.0
+ 9.984604494e-315
+ 9.98462062e-315
+ 1.233895267e-314
+ 9.98572448e-315
+ 1.0177694914e-314
+ 1.01776961e-314
+ 1.0177696337e-314
+ 9.985720055e-315
+ 9.985721636e-315
+ 9.98572195e-315
 ````
 
 Which is equivalent of
@@ -73,16 +73,16 @@ vA = Array{Float64, 1}(undef, 10)
 
 ````
 10-element Vector{Float64}:
- 0.0
- 1.39751274e-315
- 1.768101185e-315
- 0.0
- 1.39751274e-315
- 1.768099683e-315
- 0.0
- 1.39751274e-315
- 1.41422718e-315
- 0.0
+ 1.5e-323
+ 1.6e-322
+ 6.9525322588186e-310
+ 4.94e-322
+ 4.94e-321
+ 1.235e-321
+ 1.0e-322
+ 1.5e-323
+ 1.6e-322
+ 2.0e-323
 ````
 
 ## Question 004
@@ -284,12 +284,12 @@ mA = randn(2, 2, 2)
 ````
 2×2×2 Array{Float64, 3}:
 [:, :, 1] =
- -0.985358  -1.37376
- -0.506227  -0.353122
+  0.669214  -0.400137
+ -0.793407  -1.63622
 
 [:, :, 2] =
-  1.86933  -0.416083
- -1.52503   0.524303
+  0.911845   0.427862
+ -0.181989  -0.691848
 ````
 
 ## Question 013
@@ -301,7 +301,7 @@ minVal = minimum(mA)
 ````
 
 ````
-0.029521530262283435
+0.021810679815622236
 ````
 
 ````julia
@@ -309,7 +309,7 @@ maxVal = maximum(mA)
 ````
 
 ````
-0.9977784777935482
+0.997639561962288
 ````
 
 Using `extrema()` one could get both values at once:
@@ -326,7 +326,7 @@ meanVal = mean(randn(30))
 ````
 
 ````
-0.05568905005495321
+-0.2506460937726567
 ````
 
 ## Question 015
@@ -511,10 +511,10 @@ mA .= (mA .- mean(mA)) ./ std(mA) #<! Pay attention that `@.` will yield error (
 
 ````
 4×4 Matrix{Float64}:
- -0.157024    1.11293   0.847533  -0.985543
- -1.53526     1.10867   0.405063  -0.273663
-  0.0361103   0.89596  -0.103606   0.373921
-  0.595365   -1.86609   1.06266   -1.51703
+  0.74097   -0.80354   -1.23802    0.358883
+  0.959749  -0.118114  -0.729364  -0.323697
+ -1.17519    0.462724  -0.678311   1.64531
+ -1.34173    1.43592    1.30331   -0.498911
 ````
 
 ## Question 023
@@ -532,7 +532,7 @@ sMyColor = sColor(rand(UInt8, 4)...)
 ````
 
 ````
-Main.##388.sColor(0xc0, 0xcc, 0xaf, 0xb7)
+Main.##397.sColor(0x50, 0xa5, 0x85, 0x5d)
 ````
 
 ## Question 024
@@ -544,8 +544,8 @@ mA = rand(2, 4) * randn(4, 3)
 
 ````
 2×3 Matrix{Float64}:
- 2.54561   1.45343    0.521468
- 1.40624  -0.175938  -0.347468
+ 0.859945  0.710342   0.24855
+ 1.34843   0.792782  -1.00632
 ````
 
 ## Question 025
@@ -558,14 +558,14 @@ map!(x -> ((x > 3) && (x < 8)) ? -x : x, vA, vA)
 
 ````
 8-element Vector{Int64}:
- 10
   2
-  8
- -4
- 10
- 10
+  2
+  2
+  9
  -5
-  8
+ -5
+ -4
+ -6
 ````
 
 Using logical indices one could use:
@@ -606,9 +606,9 @@ vZ .^ vZ
 
 ````
 3-element Vector{Int64}:
- 387420489
-     46656
-      3125
+ 16777216
+    46656
+   823543
 ````
 
 ````julia
@@ -620,7 +620,7 @@ end
 ````
 
 ````
-MethodError(<<, (2, [9, 6, 5]), 0x0000000000007e37)
+MethodError(<<, (2, [8, 6, 7]), 0x0000000000007f17)
 
 ````
 
@@ -638,9 +638,9 @@ false
 
 ````
 3-element Vector{Complex{Int64}}:
- 0 + 9im
+ 0 + 8im
  0 + 6im
- 0 + 5im
+ 0 + 7im
 ````
 
 ````julia
@@ -649,9 +649,9 @@ vZ / 1 / 1
 
 ````
 3-element Vector{Float64}:
- 9.0
+ 8.0
  6.0
- 5.0
+ 7.0
 ````
 
 ````julia
@@ -711,14 +711,14 @@ map(x -> x > 0 ? ceil(x) : floor(x), vA)
 ````
 10-element Vector{Float64}:
   1.0
-  2.0
- -1.0
+  1.0
+  3.0
+ -2.0
+  1.0
  -2.0
  -1.0
   1.0
  -1.0
- -1.0
-  2.0
  -1.0
 ````
 
@@ -733,10 +733,8 @@ vA[findall(in(vB), vA)]
 ````
 
 ````
-3-element Vector{Int64}:
- 10
- 10
-  9
+1-element Vector{Int64}:
+ 7
 ````
 
 ## Question 031
@@ -778,9 +776,9 @@ println("Tomorrow: $(today() + Day(1))");
 ````
 
 ````
-Yesterday: 2022-03-31
-Today: 2022-04-01
-Tomorrow: 2022-04-02
+Yesterday: 2022-04-01
+Today: 2022-04-02
+Tomorrow: 2022-04-03
 
 ````
 
@@ -837,8 +835,8 @@ mA .= ((mA .+ mB) .* (.-mA ./ 2))
 
 ````
 2×2 Matrix{Float64}:
- -0.191615   -0.031102
- -0.0627452  -0.953912
+ -0.0663891  -0.191632
+ -0.0186622  -0.747637
 ````
 
 Using the dot macro:
@@ -862,9 +860,9 @@ floor.(mA)
 
 ````
 3×3 Matrix{Float64}:
- 2.0  1.0  1.0
- 3.0  0.0  3.0
- 1.0  3.0  0.0
+ 3.0  1.0  4.0
+ 2.0  1.0  3.0
+ 0.0  1.0  0.0
 ````
 
 Option 2:
@@ -875,9 +873,9 @@ round.(mA .- 0.5) #<! Generates -0.0 for numbers smaller than 0.5
 
 ````
 3×3 Matrix{Float64}:
- 2.0  1.0  1.0
- 3.0  0.0  3.0
- 1.0  3.0  0.0
+ 3.0  1.0   4.0
+ 2.0  1.0   3.0
+ 0.0  1.0  -0.0
 ````
 
 Option 3:
@@ -888,9 +886,9 @@ mA .÷ 1
 
 ````
 3×3 Matrix{Float64}:
- 2.0  1.0  1.0
- 3.0  0.0  3.0
- 1.0  3.0  0.0
+ 3.0  1.0  4.0
+ 2.0  1.0  3.0
+ 0.0  1.0  0.0
 ````
 
 Option 4:
@@ -901,9 +899,9 @@ mA .- rem.(mA, 1)
 
 ````
 3×3 Matrix{Float64}:
- 2.0  1.0  1.0
- 3.0  0.0  3.0
- 1.0  3.0  0.0
+ 3.0  1.0  4.0
+ 2.0  1.0  3.0
+ 0.0  1.0  0.0
 ````
 
 ## Question 037
@@ -965,16 +963,16 @@ sort(vA)
 
 ````
 10-element Vector{Int64}:
- 2
- 3
- 3
- 3
- 5
- 6
- 6
- 8
- 8
- 9
+  1
+  1
+  2
+  4
+  4
+  6
+  7
+  7
+  9
+ 10
 ````
 
 ## Question 041
@@ -1021,16 +1019,16 @@ mB = [ConvToPolar(vX) for vX in eachrow(mA)]
 
 ````
 10-element Vector{Vector{Float64}}:
- [1.1032945858717953, 1.003885091929777]
- [0.7702828882789503, 1.0605966683036137]
- [1.2989425091935676, 0.7240692850344901]
- [1.1838001156649929, 0.9992637726246375]
- [0.7421041361834526, 0.9542558401158613]
- [0.24445835401097696, 1.100873686158597]
- [0.7170419187958441, 0.9278770042476235]
- [0.5997951127595352, 1.5095931610387916]
- [1.275933082550732, 0.7442461223512844]
- [0.6671283899425791, 0.7963819723414156]
+ [1.0315809181993219, 0.8871722160325441]
+ [0.6376838296604495, 0.36877350719376495]
+ [0.7151815033208409, 1.1973909326713812]
+ [0.9969517113270927, 1.440066169844722]
+ [0.5999344125648447, 0.3562902465193647]
+ [0.7180151667630744, 0.30420277868092654]
+ [0.9077578188221964, 1.3044911022510128]
+ [0.8699079195294741, 1.3312294635683288]
+ [0.9367734927779997, 0.36663868346507733]
+ [0.7851806356161383, 1.2639346657030024]
 ````
 
 ## Question 045
@@ -1044,16 +1042,16 @@ vA
 
 ````
 10-element Vector{Float64}:
- -0.9756785288566983
+  0.04728658605360086
+ -0.3478031658305469
   0.0
- -1.0221558387157434
- -0.5785053803771774
-  0.10579984109372706
- -0.7397520192529856
- -0.9049972259641396
-  0.4896049226380361
- -1.2709213359548797
- -2.0282236277264802
+ -0.296745497895502
+ -1.1587262071301558
+ -2.3582440831120364
+ -0.7916758475762025
+  0.07323788834635699
+  0.7102775755228714
+ -1.659860605214068
 ````
 
 ## Question 046
@@ -1103,11 +1101,11 @@ mC = 1 ./ (vX .- vY')
 
 ````
 5×5 Matrix{Float64}:
- 1.33938  1.20313  1.10056   3.51792  1.11525
- 5.10195  3.56436  2.79315  -3.75444  2.88977
- 5.28293  3.65176  2.84654  -3.66212  2.94695
- 1.34261  1.20574  1.10274   3.5403   1.11749
- 1.75702  1.52976  1.36769   9.36402  1.39045
+ -5.40604  -1.08235  17.6693   -3.37888  -1.06931
+  2.30231  -3.28312   1.47947   3.09245  -3.16596
+  1.79304  -5.5181    1.25112   2.23846  -5.19498
+ -6.28841  -1.11364  12.1137   -3.7037   -1.09983
+  5.52612  -1.79219   2.36668  14.2896   -1.7567
 ````
 
 ## Question 048
@@ -1157,7 +1155,7 @@ print(mA);
 ````
 
 ````
-[0.2190630495305752 0.6016509713737132 0.2927311898188424; 0.8524252688814391 0.8427559533474894 0.5336920756533082; 0.24415930941385378 0.8969819696702224 0.9071334025842357]
+[0.10165904304954676 0.8344370261226739 0.24821268100221394; 0.07503653683550726 0.21843860491903966 0.06393462460425559; 0.3114814513020274 0.8228491711655808 0.6853447718970912]
 ````
 
 ## Question 050
@@ -1171,7 +1169,7 @@ vA[argmin(abs.(vA .- inputVal))]
 ````
 
 ````
-0.48636694736355024
+0.7226725229729232
 ````
 
 ## Question 051
@@ -1204,11 +1202,11 @@ mD
 
 ````
 5×5 Matrix{Float64}:
- 1.11022e-16   0.0747757    0.183647    0.31034      0.361749
- 0.0747757    -2.22045e-16  0.142292    0.089779     0.154546
- 0.183647      0.142292     0.0         0.366514     0.0958707
- 0.31034       0.089779     0.366514   -4.44089e-16  0.199984
- 0.361749      0.154546     0.0958707   0.199984     0.0
+ 0.0         0.140933     0.609697  0.0880139  0.554325
+ 0.140933   -2.22045e-16  0.410043  0.0994205  0.149016
+ 0.609697    0.410043     0.0       0.234411   0.302886
+ 0.0880139   0.0994205    0.234411  0.0        0.314956
+ 0.554325    0.149016     0.302886  0.314956   0.0
 ````
 
 ## Question 053
@@ -1221,11 +1219,11 @@ vA .= round.(Int32, vA)
 
 ````
 5-element Vector{Float32}:
-  1.0
- 79.0
- 43.0
- 35.0
- 14.0
+  62.0
+ 100.0
+  76.0
+  67.0
+  16.0
 ````
 
 ## Question 054
@@ -1261,23 +1259,23 @@ end
 
 ````
 1
-0.16317774924850514
+0.016709422711794875
 2
-0.9697073315452882
+0.5576311033678298
 3
-0.589011639016743
+0.9002772974372704
 4
-0.4167423269008734
+0.650458171527239
 5
-0.35195834500252066
+0.15049148974020055
 6
-0.2689732431380807
+0.5949824430456485
 7
-0.9494579413039923
+0.9615765853058164
 8
-0.2265695425791754
+0.8584431356359545
 9
-0.4837208748577452
+0.9960625496334121
 
 ````
 
@@ -1337,7 +1335,7 @@ mean(mA, dims = 1)
 
 ````
 1×3 Matrix{Float64}:
- 0.342108  -0.400401  0.0582927
+ -0.0322767  0.0655915  -0.0333148
 ````
 
 ## Question 059
@@ -1352,9 +1350,9 @@ mA[sortperm(mA[:, colIdx]), :]
 
 ````
 3×3 Matrix{Float64}:
- 0.389559  0.158996  0.496896
- 0.258658  0.352045  0.302044
- 0.356501  0.650688  0.93751
+ 0.54408   0.525052  0.00873273
+ 0.298769  0.54298   0.566034
+ 0.946332  0.976442  0.0381463
 ````
 
 Using `sortslices()`:
@@ -1372,7 +1370,7 @@ any(all(iszero.(mA), dims = 1))
 ````
 
 ````
-true
+false
 ````
 
 ## Question 061
@@ -1386,7 +1384,7 @@ vA[sortperm(abs.(vA .- inputVal))[2]]
 ````
 
 ````
-0.4512759696704328
+0.679386569318381
 ````
 
 Alternative way (More efficient)
@@ -1428,7 +1426,7 @@ sum([aVal + bVal for aVal in vA, bVal in vB])
 ````
 
 ````
-7.323378353407032
+5.397325132416055
 ````
 
 ## Question 063
@@ -1454,8 +1452,8 @@ println(vA);
 ````
 
 ````
-[1, 3, 5, 1, 6]
-[1, 4, 5, 2, 7]
+[4, 9, 6, 6, 7]
+[4, 10, 7, 7, 7]
 
 ````
 
@@ -1479,9 +1477,9 @@ println("vF: $vF");
 ````
 
 ````
-vX: [3, 4, 4, 3, 2, 4, 3, 3, 4, 3]
-vI: [2, 1, 1, 13, 2, 7, 9, 6, 13, 15]
-vF: [8.0, 5.0, 0.0, 0.0, 0.0, 3.0, 4.0, 0.0, 3.0, 0.0, 0.0, 0.0, 7.0, 0.0, 3.0]
+vX: [1, 1, 4, 1, 4, 4, 2, 4, 5, 4]
+vI: [3, 9, 6, 7, 9, 1, 14, 3, 15, 13]
+vF: [4.0, 0.0, 5.0, 0.0, 0.0, 4.0, 1.0, 0.0, 5.0, 0.0, 0.0, 0.0, 4.0, 2.0, 5.0]
 
 ````
 
@@ -1498,7 +1496,7 @@ print("Number of Unique Colors: $numColors");
 ````
 
 ````
-Number of Unique Colors: 970628
+Number of Unique Colors: 970470
 ````
 
 Another option:
@@ -1509,7 +1507,7 @@ print("Number of Unique Colors: $numColors");
 ````
 
 ````
-Number of Unique Colors: 970628
+Number of Unique Colors: 970470
 ````
 
 ## Question 067
@@ -1523,8 +1521,8 @@ sum(reshape(mA, (2, 2, :)), dims = 3)
 ````
 2×2×1 Array{Float64, 3}:
 [:, :, 1] =
- 1.78299  1.81893
- 2.03399  2.1815
+ 2.21471  1.96948
+ 2.70327  2.6975
 ````
 
 ## Question 068
@@ -1556,9 +1554,9 @@ println("vF: $vF");
 ````
 
 ````
-vX: [1, 3, 1, 5, 2, 1, 4, 2, 1, 5]
-vI: [4, 4, 13, 7, 1, 1, 7, 12, 8, 8]
-vF: [1.5, 0.0, 0.0, 2.0, 0.0, 0.0, 4.5, 3.0, 0.0, 0.0, 0.0, 2.0, 1.0]
+vX: [1, 5, 5, 2, 3, 3, 3, 3, 4, 4]
+vI: [4, 8, 5, 3, 10, 8, 6, 9, 13, 6]
+vF: [0.0, 0.0, 2.0, 1.0, 5.0, 3.5, 0.0, 4.0, 3.0, 3.0, 0.0, 0.0, 4.0]
 
 ````
 
@@ -1575,10 +1573,10 @@ vD = [dot(mA[ii, :], mB[:, ii]) for ii in 1:numDiagElements]
 
 ````
 4-element Vector{Float64}:
- 1.280292915026738
- 1.9791032332749543
- 1.5320874997868645
- 0.7576314584292926
+ 1.4926284485295946
+ 0.6744292362306263
+ 1.3003382946550925
+ 1.473601169330092
 ````
 
 Alternative way:
@@ -1589,10 +1587,10 @@ vD = reshape(sum(mA[1:numDiagElements, :]' .* mB[:, 1:numDiagElements], dims = 1
 
 ````
 4-element Vector{Float64}:
- 1.2802929150267377
- 1.9791032332749545
- 1.5320874997868645
- 0.7576314584292926
+ 1.4926284485295946
+ 0.6744292362306266
+ 1.3003382946550928
+ 1.473601169330092
 ````
 
 ## Question 070
@@ -1622,6 +1620,226 @@ println(vB);
 [1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 5]
 [1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 5]
 
+````
+
+## Question 071
+Consider an array of dimension `5 x 5 x 3`, mulitply it by an array with dimensions `5 x 5` using broadcasting. (★★★)
+
+````julia
+mA = rand(5, 5, 3);
+mB = rand(5, 5);
+
+mA .* mB #<! Very easy in Julia
+````
+
+````
+5×5×3 Array{Float64, 3}:
+[:, :, 1] =
+ 0.117222   0.192235    0.669878   0.0977232  0.0809474
+ 0.399833   0.820334    0.0395857  0.026589   0.716496
+ 0.197783   0.133113    0.0282923  0.277185   0.0333526
+ 0.0480258  0.00615869  0.303732   0.011473   0.364037
+ 0.707548   0.0498159   0.434595   0.159642   0.116937
+
+[:, :, 2] =
+ 0.453781  0.492726    0.17226    0.0683467  0.0490861
+ 0.551218  0.389162    0.0430097  0.259322   0.460161
+ 0.130285  0.00704233  0.283884   0.349335   0.0366361
+ 0.197165  0.0693721   0.56388    0.0103685  0.410506
+ 0.321164  0.696659    0.541401   0.120795   0.0599916
+
+[:, :, 3] =
+ 0.507399   0.242203   0.0681174  0.115057   0.0486235
+ 0.376822   0.84709    0.0990191  0.387401   0.317776
+ 0.175256   0.135148   0.162433   0.172186   0.0124483
+ 0.0332724  0.0487117  0.80751    0.0083179  0.0655471
+ 0.580135   0.301009   0.123406   0.250197   0.632402
+````
+
+## Question 072
+Swap two rows of a 2D array. (★★★)
+
+````julia
+mA = rand(UInt8, 3, 2);
+println(mA);
+mA[[1, 2], :] .= mA[[2, 1], :];
+println(mA);
+````
+
+````
+UInt8[0xde 0xc6; 0x96 0xb0; 0x97 0x4d]
+UInt8[0x96 0xb0; 0xde 0xc6; 0x97 0x4d]
+
+````
+
+## Question 073
+Consider a set of 10 triplets describing 10 triangles (with shared vertices), find the set of unique line segments composing all the triangles. (★★★)
+
+TODO: Need to understand the question.
+
+## Question 074
+Given a sorted array `vC` that corresponds to a bincount, produce an array `vA` such that `bincount(vA) == vC`. (★★★)
+
+````julia
+vC = rand(0:7, 5);
+numElements = sum(vC);
+vA = zeros(Int, numElements);
+
+elmIdx = 1;
+# Using `global` for scope in Literate
+for (ii, binCount) in enumerate(vC)
+    for jj in 1:binCount
+        vA[elmIdx] = ii;
+        global elmIdx += 1;
+    end
+end
+````
+
+## Question 075
+Compute averages using a sliding window over an array. (★★★)
+
+````julia
+numElements = 10;
+winRadius   = 1;
+winReach    = 2 * winRadius;
+winLength   = 1 + winReach;
+
+vA = rand(0:3, numElements);
+vB = zeros(numElements - (2 * winRadius));
+
+aIdx = 1 + winRadius;
+# Using `global` for scope in Literate
+for ii in 1:length(vB)
+    vB[ii] = mean(vA[(aIdx - winRadius):(aIdx + winRadius)]); #<! Using integral / running sum it would be faster.
+    global aIdx += 1;
+end
+````
+
+Another method using running sum:
+
+````julia
+vC = zeros(numElements - winReach);
+
+jj = 1;
+sumVal = sum(vA[1:winLength]);
+vC[jj] = sumVal / winLength;
+jj += 1;
+
+# Using `global` for scope in Literate
+for ii in 2:(numElements - winReach)
+    global sumVal += vA[ii + winReach] - vA[ii - 1];
+    vC[jj] = sumVal / winLength;
+    global jj += 1;
+end
+
+maximum(abs.(vC - vB)) < 1e-8
+````
+
+````
+true
+````
+
+## Question 076
+ Consider a one dimensional array `vA`, build a two dimensional array whose first row is `[ vA[0], vA[1], vA[2] ]`  and each subsequent row is shifted by 1. (★★★)
+
+````julia
+vA = rand(10);
+numCols = 3;
+
+numRows = length(vA) - numCols + 1;
+mA = zeros(numRows, numCols);
+
+for ii in 1:numRows
+    mA[ii, :] = vA[ii:(ii + numCols - 1)]; #<! One could optimize the `-1` out
+end
+````
+
+## Question 077
+ Negate a boolean or to change the sign of a float inplace. (★★★)
+
+````julia
+vA = rand(Bool, 10);
+vA .= .!vA;
+
+vA = randn(10);
+vA .*= -1;
+````
+
+## Question 078
+ Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a point `vP`, how to compute distance from the point `vP` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+
+````julia
+# See distance of a point from a line in Wikipedia (https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line).
+# Specifically _Line Defined by Two Points_.
+
+numLines = 10;
+mP1 = randn(numLines, 2);
+mP2 = randn(numLines, 2);
+vP  = randn(2);
+
+vD = [(abs(((vP2[1] - vP1[1]) * (vP1[2] - vP[2])) - ((vP1[1] - vP[1]) * (vP2[2] - vP1[2]))) / hypot((vP2 - vP1)...)) for (vP1, vP2) in zip(eachrow(mP1), eachrow(mP2))];
+minDist = minimum(vD);
+
+println("Min Distance: $minDist");
+````
+
+````
+Min Distance: 0.05383461098772039
+
+````
+
+## Question 079
+ Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a set of points `mP`, how to compute distance from the point `vP = mP[j, :]` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+
+````julia
+numLines = 5;
+mP1 = randn(numLines, 2);
+mP2 = randn(numLines, 2);
+mP  = randn(numLines, 2);
+
+mD = [(abs(((vP2[1] - vP1[1]) * (vP1[2] - vP[2])) - ((vP1[1] - vP[1]) * (vP2[2] - vP1[2]))) / hypot((vP2 - vP1)...)) for (vP1, vP2) in zip(eachrow(mP1), eachrow(mP2)), vP in eachrow(mP)];
+
+for jj in 1:numLines
+    minDist = minimum(mD[jj, :]);
+    println("The minimum distance from the $jj -th point: $minDist");
+end
+````
+
+````
+┌ Warning: Assignment to `minDist` in soft scope is ambiguous because a global variable by the same name exists: `minDist` will be treated as a new local. Disambiguate by using `local minDist` to suppress this warning or `global minDist` to assign to the existing global variable.
+└ @ string:9
+The minimum distance from the 1 -th point: 0.09111248940270124
+The minimum distance from the 2 -th point: 0.05325175592384757
+The minimum distance from the 3 -th point: 0.33235625758862475
+The minimum distance from the 4 -th point: 0.07423846863395399
+The minimum distance from the 5 -th point: 0.10297576678151246
+
+````
+
+## Question 080
+ Consider an arbitrary 2D array, write a function that extract a subpart with a fixed shape and centered on a given element (Handel out of bounds). (★★★)
+
+````julia
+# One could use `PaddedViews.jl` to easily solve this.
+
+arrayLength = 10;
+winRadius   = 3;
+vWinCenter  = [7, 9];
+
+mA = rand(arrayLength, arrayLength);
+winLength = (2 * winRadius) + 1;
+mB = zeros(winLength, winLength);
+
+verShift = -winRadius;
+# Using `global` for scope in Literate
+for ii in 1:winLength
+    horShift = -winRadius;
+    for jj in 1:winLength
+        mB[ii, jj] = mA[min(max(vWinCenter[1] + verShift, 1), arrayLength), min(max(vWinCenter[2] + horShift, 1), arrayLength)]; #<! Nearest neighbor extrapolation
+        horShift += 1;
+    end
+    global verShift += 1;
+end
 ````
 
 ---
