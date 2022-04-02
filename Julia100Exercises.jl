@@ -14,6 +14,8 @@
 # ```
 #
 # **Remark**: Tested with Julia `1.7.2`.
+# **To Do**:
+# 1. Reevaluate the difficulty level of each question.
 
 using Literate;
 using LinearAlgebra;
@@ -782,7 +784,7 @@ end
 maximum(abs.(vC - vB)) < 1e-8
 
 # ## Question 076
-#  Consider a one dimensional array `vA`, build a two dimensional array whose first row is `[ vA[0], vA[1], vA[2] ]`  and each subsequent row is shifted by 1. (★★★)
+# Consider a one dimensional array `vA`, build a two dimensional array whose first row is `[ vA[0], vA[1], vA[2] ]`  and each subsequent row is shifted by 1. (★★★)
 
 vA = rand(10);
 numCols = 3;
@@ -795,7 +797,7 @@ for ii in 1:numRows
 end
 
 # ## Question 077
-#  Negate a boolean or to change the sign of a float inplace. (★★★)
+# Negate a boolean or to change the sign of a float inplace. (★★★)
 
 vA = rand(Bool, 10);
 vA .= .!vA;
@@ -804,7 +806,7 @@ vA = randn(10);
 vA .*= -1;
 
 # ## Question 078
-#  Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a point `vP`, how to compute distance from the point `vP` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+# Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a point `vP`, how to compute distance from the point `vP` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
 
 ## See distance of a point from a line in Wikipedia (https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line).  
 ## Specifically _Line Defined by Two Points_.
@@ -820,7 +822,7 @@ minDist = minimum(vD);
 println("Min Distance: $minDist");
 
 # ## Question 079
-#  Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a set of points `mP`, how to compute distance from the point `vP = mP[j, :]` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
+# Consider 2 sets of points `mP1`, `mP2` describing lines (2d) and a set of points `mP`, how to compute distance from the point `vP = mP[j, :]` to each line `i`: `[mP1[i, :], mP2[i, :]`. (★★★)
 
 numLines = 5;
 mP1 = randn(numLines, 2);
@@ -835,7 +837,7 @@ for jj in 1:numLines
 end
 
 # ## Question 080
-#  Consider an arbitrary 2D array, write a function that extract a subpart with a fixed shape and centered on a given element (Handel out of bounds). (★★★)
+# Consider an arbitrary 2D array, write a function that extract a subpart with a fixed shape and centered on a given element (Handel out of bounds). (★★★)
 
 ## One could use `PaddedViews.jl` to easily solve this.
 
@@ -857,3 +859,181 @@ for ii in 1:winLength
     end
     global verShift += 1;
 end
+
+# ## Question 081
+# Consider an array `vA = [1, 2, 3, ..., 13, 14]`, generate an array `vB = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6], ..., [11, 12, 13, 14]]`. (★★★)
+
+vA = collect(1:14);
+
+winNumElements  = 4;
+winReach        = winNumElements - 1;
+
+vB = [vA[ii:(ii + winReach)] for ii in 1:(length(vA) - winReach)]
+
+# ## Question 082
+# Compute a matrix rank. (★★★)
+
+numRows = 5;
+numCols = 4;
+mA = randn(numRows, numCols);
+rank(mA)
+
+# ## Question 083
+# Find the most frequent value in an array. (★★★)
+
+vA = rand(1:5, 15);
+
+# MATLAB Style (Manual loop might be faster)
+
+vB = unique(vA);
+## vB[argmax(sum(vA .== vB', dims = 1)[:])] #<! The input to `argmax()` is a `1 x n` vector, hence squeezed so `argmax()` won't return Cartesian Index.
+vB[argmax(dropdims(sum(vA .== vB', dims = 1), dims = 1))] #<! The input to `argmax()` is a `1 x n` vector, hence squeezed so `argmax()` won't return Cartesian Index.
+
+# Comparing bits:
+
+# One could convert at the bits level to integers and then use something like `counts()` from `StatsBase.jl`.
+# Support to 1:4 bytes of data:
+# ```julia
+# numBytes = sizeof(vA[1]);
+# if (sizeof(vA[1]) == 1)
+#     vB = reinterpret(UInt8, vA);
+# elseif (sizeof(vA[1]) == 2)
+#     vB = reinterpret(UInt16, vA);
+# elseif (sizeof(vA[1]) == 4)
+#     vB = reinterpret(UInt32, vA);
+# elseif (sizeof(vA[1]) == 8)
+#     vB = reinterpret(UInt64, vA);
+# end
+# ```
+
+# ## Question 084
+# Extract all the contiguous `3x3` blocks from a random `5x5` matrix. (★★★)
+
+numRows = 5;
+numCols = 5;
+
+mA = rand(1:9, numRows, numCols);
+
+winRadius   = 1;
+winReach    = 2 * winRadius;
+winLength   = winReach + 1;
+
+mB = [mA[ii:(ii + winReach), jj:(jj + winReach)] for ii in 1:(numRows - winReach), jj in 1:(numCols - winReach)]
+
+# ## Question 085
+# Create a 2D array struct such that `mA[i, j] == mA[j, i]` (Symmetric matrix). (★★★)
+
+struct SymmetricMatrix{T <: Number} <: AbstractArray{T, 2}
+    numRows::Int
+    data::Matrix{T}
+    
+    function SymmetricMatrix(mA::Matrix{T}) where {T <: Number}
+        size(mA, 1) == size(mA, 2) || throw(ArgumentError("Input matrix must be square"))
+        new{T}(size(mA, 1), Matrix(Symmetric(mA)));
+    end
+    
+end
+
+function Base.size(mA::SymmetricMatrix)
+    (mA.numRows, mA.numRows);
+end
+function Base.getindex(mA::SymmetricMatrix, ii::Int)
+    mA.data[ii];
+end
+function Base.getindex(mA::SymmetricMatrix, ii::Int, jj::Int)
+    mA.data[ii, jj];
+end
+function Base.setindex!(mA::SymmetricMatrix, v, ii::Int, jj::Int) 
+    setindex!(mA.data, v, ii, jj);
+    setindex!(mA.data, v, jj, ii);
+end
+
+mA = SymmetricMatrix(zeros(Int, 2, 2));
+mA[1, 2] = 5;
+mA
+
+# ## Question 086
+# Consider a set of `p` matrices of shape `nxn` and a set of `p` vectors with length `n`. Compute the sum of of the `p` matrix vector products at once (Result is a vector of length `n`). (★★★)
+
+## One could use `TensorOperations.jl` or `Einsum.jl` for a more elegant solution.
+
+numRows = 5;
+numMat  = 3;
+
+tP = [randn(numRows, numRows) for _ in 1:numMat];
+mP = [randn(numRows) for _ in 1:numMat];
+
+vA = reduce(+, (mP * vP for (mP, vP) in zip(tP, mP)));
+
+#+ Vanilla solution
+
+vB = zeros(numRows);
+for ii in 1:numMat
+    vB .+= tP[ii] * mP[ii];
+end
+
+vA == vB
+
+# ## Question 087
+# Consider a `16x16` array, calculate the block sum (Block size is `4x4`). (★★★)
+
+# We solve a more general case for any size of blocks.
+
+numRows = 16;
+numCols = 8;
+
+vBlockSize = [2, 4]; #<! [numRows, numCols] ./ vBlockSize == integer
+
+mA = rand(numRows, numCols);
+
+numBlocksVert   = numRows ÷ vBlockSize[1];
+numBlocksHori   = numCols ÷ vBlockSize[2];
+numBlocks       = numBlocksVert * numBlocksHori;
+
+mA = reshape(mA, vBlockSize[1], :);
+
+# We number the blocks column wise and create their block index per column of the reshaped `mA`.
+vBlockIdx = 1:numBlocks;
+mBlockIdx = reshape(vBlockIdx, numBlocksVert, numBlocksHori);
+mBlockIdx = repeat(mBlockIdx, 1, 1, vBlockSize[2]);
+mBlockIdx = permutedims(mBlockIdx, (1, 3, 2));
+vBlockIdx = mBlockIdx[:]; #<! Matches the block index per column of the reshaped `mA`.
+
+vA = dropdims(sum(mA, dims = 1), dims = 1);
+vB = zeros(numBlocks);
+
+for ii = 1:(numBlocks * vBlockSize[2])
+    vB[vBlockIdx[ii]] += vA[ii];
+end
+vB
+
+# ## Question 088
+# Implement the simulation _Game of Life_ using arrays. (★★★)
+
+# TODO: Need to learn the rules of the simulation.
+
+# ## Question 089
+# Get the `n` largest values of an array. (★★★)
+
+vA = rand(10);
+numValues = 3;
+
+vA[partialsortperm(vA, 1:numValues, rev = true)]
+
+# ## Question 090
+# Given an arbitrary number of vectors, build the _Cartesian Product_ (Every combinations of every item). (★★★)
+
+function CartesianProduct(tupleX)
+    return collect(Iterators.product(tupleX...))[:];
+end
+
+vA = 1:3;
+vB = 8:9;
+vC = 4:5;
+
+CartesianProduct((vA, vB, vC))
+
+
+
+
+
