@@ -13,7 +13,8 @@
 # Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavor = Literate.CommonMarkFlavor());
 # ```
 #
-# **Remark**: Tested with Julia `1.7.2`.
+# **Remark**: Tested with Julia `1.7.2`.  
+#
 # **To Do**:
 # 1. Reevaluate the difficulty level of each question.
 
@@ -24,6 +25,7 @@ using Dates;
 using DelimitedFiles;
 using UnicodePlots;
 using Random;
+using Tullio;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
@@ -1033,7 +1035,147 @@ vC = 4:5;
 
 CartesianProduct((vA, vB, vC))
 
+# ## Question 091
+# Create an array which can be accessed like a _record array_ in _NumPy_. (★★★)
 
+# One could use `StructArrays.jl`.
 
+# ## Question 092
+# Consider a large vector `vA`, compute `vA` to the power of 3 using 3 different methods. (★★★)
 
+vA = rand(1000);
 
+# Method 001:
+
+vB = vA .^ 3;
+
+# Method 002:
+
+vC = [valA ^ 3 for valA in vA];
+
+# Method 003:
+
+vD = zeros(length(vA));
+for (ii, valA) in enumerate(vA)
+    vD[ii] = valA * valA * valA;
+end
+
+#+
+
+vB ≈ vC ≈ vD
+
+# ## Question 093
+# Consider two arrays `mA` and `mB` of shape `8x3` and `2x2`. Find rows of `mA` that contain elements of each row of `mB` regardless of the order of the elements in `mB`. (★★★)
+
+# The way I interpret the question is rows in `mA` which contain at least 1 element from each row of `mB`.
+
+mA = rand(0:4, 8, 3);
+mB = rand(0:4, 2, 2);
+mC = [any(vA .== vB') for vB in eachrow(mB), vA in eachrow(mA)]; #<! General solution, will work for any size of `mA` and `mB`
+vD = [all(vC) for vC in eachcol(mC)]
+
+# In order to have a solution without the intermediate array `mC`
+
+function Iterate2(iA; iterState = missing)
+    if(ismissing(iterState))
+        valA, iterState = iterate(iA);
+    else
+        valA, iterState = iterate(iA, iterState);
+    end
+    valB, iterState = iterate(iA, iterState);
+    return (valA, valB), iterState
+end
+
+tT = (any(vA .== vB') for vB in eachrow(mB), vA in eachrow(mA));
+
+iterState = missing;
+
+vE = zeros(Bool, size(mA, 1));
+
+for ii = 1:length(vD)
+    global iterState;
+    (valA, valB), iterState = Iterate2(tT; iterState = iterState);
+    vE[ii] = valA && valB;
+end
+
+vD == vE
+
+# ## Question 094
+# Considering a `10x3` matrix, extract rows with unequal values. (★★★)
+
+mA = rand(1:3, 10, 3);
+vD = [maximum(vA) != minimum(vA) for vA in eachrow(mA)]
+
+# ## Question 095
+# Convert a vector of ints into a matrix binary representation. (★★★)
+
+vA = rand(UInt8, 10);
+mB = zeros(Bool, length(vA), 8);
+
+## See https://discourse.julialang.org/t/26663
+for ii in 1:length(vA)
+    vS = bitstring(vA[ii]);
+    for jj in 1:size(mB, 2)
+        mB[ii, jj] = vS[jj] == '1';
+    end
+end
+
+mB
+
+# ## Question 096
+# Given a two dimensional array, extract unique rows. (★★★)
+
+mA = UInt8.(rand(1:3, 10, 3));
+
+vS = [reduce(*, bitstring(valA) for valA in vA) for vA in eachrow(mA)]; #<! Supports any array!
+vU = unique(vS);
+vI = [findfirst(valU .== vS) for valU in vU];
+
+# An alternative way:
+vB = indexin(vU, vS);
+vB == vI
+
+# ## Question 097
+# Considering 2 vectors `vA` and `vB`, write the einsum equivalent (Using `Einsum.jl`) of inner, outer, sum, and mul function. (★★★)
+
+vA = rand(5);
+vB = rand(5);
+
+# Inner Product
+@tullio tullioVal = vA[ii] * vB[ii];
+tullioVal ≈ dot(vA, vB) #<! Inner product
+
+# Outer  Product
+@tullio mTullio[ii, jj] := vA[ii] * vB[jj]; #<! Outer product
+mTullio ≈ vA * vB'
+
+# Sum
+@tullio tullioVal = vA[ii];
+tullioVal ≈ sum(vA) #<! Sum
+
+# Multiplication
+@tullio vTullio[ii] := vA[ii] * vB[ii];
+vTullio ≈ vA .* vB #<! Multiplication
+
+# ## Question 098
+# Considering a path described by two vectors `vA` and `vB, sample it using equidistant samples. (★★★)
+
+# TODO: Figure the meaning of the question.
+
+# ## Question 099
+# Given an integer `n` and a 2D array `mA`, find the rows which can be interpreted as draws from a multinomial distribution with `n` (Rows which only contain integers and which sum to `n`). (★★★)
+
+mA = rand([0, 0.5, 1, 2, 3], 15, 3);
+sumVal = 4;
+vI = [all(vA .== round.(vA)) && sum(vA) == sumVal for vA in eachrow(mA)];
+
+# ## Question 100
+# Compute bootstrapped `95%` confidence intervals for the mean of a 1D array `vA`. Namely, resample the elements of an array with replacement `N` times, compute the mean of each sample and then compute percentiles over the means. (★★★)
+
+numTrials   = 1000;
+numSamples  = 100;
+μ           = 0.5;
+
+vA = μ .+ randn(numSamples);
+tM = (mean(vA[rand(1:numSamples, numSamples)]) for _ in 1:numTrials);
+quantile(tM, [0.025, 0.975])
