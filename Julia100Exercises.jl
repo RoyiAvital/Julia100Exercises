@@ -26,6 +26,7 @@ using DelimitedFiles;
 using UnicodePlots;
 using Random;
 using Tullio;
+using StaticKernels;
 
 # ## Question 001
 # Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
@@ -1012,7 +1013,35 @@ vB
 # ## Question 088
 # Implement the simulation _Game of Life_ using arrays. (★★★)
 
-# TODO: Need to learn the rules of the simulation.
+numRows = 20;
+numCols = 20;
+
+gofKernel           = @kernel w -> w[-1, -1] + w[-1, 0] + w[-1, 1] + w[0, -1] + w[0, 1] + w[1, -1] + w[1, 0] + w[1, 1];
+gofNumLives         = round(Int, 0.05 * numRows * numCols);
+gofNumGenerations   = 50;
+
+vI = randperm(numRows * numCols)[1:gofNumLives];
+
+# mG = rand(UInt8.(0:1), numRows, numCols);
+mG = zeros(UInt8, numRows, numCols);
+mG[vI] .= UInt8(1);
+mB = similar(mG);
+
+heatmap(mG) #<! Initialization
+
+#+
+
+for ii in 1:numGridPts
+    map!(gofKernel, mB, extend(mG, StaticKernels.ExtensionConstant(0))); #<! One may use `ExtensionCircular`
+    for ii in eachindex(mB)
+        mG[ii] = UInt8((mB[ii] >= 3) || ((mB[ii] > 0) && (mB[ii] == 2))); #<! Could be done with broadcasting
+    end
+end
+
+heatmap(mG) #<! Final state
+
+
+# TODO: Use O(1) implementation for Box Blur.
 
 # ## Question 089
 # Get the `n` largest values of an array. (★★★)
