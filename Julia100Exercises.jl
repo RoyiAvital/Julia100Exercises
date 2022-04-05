@@ -17,6 +17,7 @@
 #
 # **To Do**:
 # 1. Reevaluate the difficulty level of each question.
+# 2. Complete question `73`.
 
 using Literate;
 using LinearAlgebra;
@@ -1022,7 +1023,6 @@ gofNumGenerations   = 50;
 
 vI = randperm(numRows * numCols)[1:gofNumLives];
 
-# mG = rand(UInt8.(0:1), numRows, numCols);
 mG = zeros(UInt8, numRows, numCols);
 mG[vI] .= UInt8(1);
 mB = similar(mG);
@@ -1187,9 +1187,63 @@ tullioVal ≈ sum(vA) #<! Sum
 vTullio ≈ vA .* vB #<! Multiplication
 
 # ## Question 098
-# Considering a path described by two vectors `vA` and `vB, sample it using equidistant samples. (★★★)
+# Considering a path described by two vectors `vX` and `vY, sample it using equidistant samples. (★★★)
 
-# TODO: Figure the meaning of the question.
+# The way I interpreted the question is to create sub segments of the same length.  
+
+numPts      = 100;
+numSegments = 1000;
+
+vX = sort(10 * rand(numPts));
+vY = sort(10 * rand(numPts));
+
+vR = cumsum(hypot.(diff(vX), diff(vY)));
+pushfirst!(vR, 0.0);
+vRSegment = LinRange(0.0, vR[end], numSegments);
+
+struct LinearInterpolator1D{T <: Number} <: AbstractArray{T, 1}
+    vX::Vector{T};
+    vY::Vector{T};
+
+    function LinearInterpolator1D(vX::Vector{T}, vY::Vector{T}) where {T <: Number}
+        length(vX) == length(vX) || throw(ArgumentError("Input vectors must have the same length"));
+        new{T}(vX, vY);
+    end
+end
+
+function Base.size(vA::LinearInterpolator1D)
+    size(vA.vX);
+end
+function Base.getindex(vA::LinearInterpolator1D, ii::Number)
+    if (ii >= vA.vX[end])
+        return vA.vY[end];
+    end
+    if (ii <= vA.vX[1])
+        return vA.vY[1];
+    end
+    
+    rightIdx = findfirst(vA.vX .>= ii);
+    leftIdx = rightIdx - 1;
+
+    tt = (ii - vA.vX[leftIdx]) / (vA.vX[rightIdx] - vA.vX[leftIdx]);
+
+    return ((1 - tt) * vA.vY[leftIdx]) + (tt * vA.vY[rightIdx]);
+
+end
+function Base.setindex!(vA::LinearInterpolator1D, valX, valY, ii::Int, jj::Int) 
+    setindex!(sLinInterp.vX, valX, ii);
+    setindex!(sLinInterp.vY, valY, ii);
+end
+
+vXInt = LinearInterpolator1D(vR, vX);
+vYInt = LinearInterpolator1D(vR, vY);
+
+vXSegment = [vXInt[intIdx] for intIdx in vRSegment];
+vYSegment = [vYInt[intIdx] for intIdx in vRSegment];
+
+hP = lineplot(vX, vY, canvas = DotCanvas, name = "Samples");
+lineplot!(hP, vXSegment, vYSegment, name = "Interpolated");
+hP
 
 # ## Question 099
 # Given an integer `n` and a 2D array `mA`, find the rows which can be interpreted as draws from a multinomial distribution with `n` (Rows which only contain integers and which sum to `n`). (★★★)
