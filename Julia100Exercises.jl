@@ -17,7 +17,6 @@
 #
 # **To Do**:
 # 1. Reevaluate the difficulty level of each question.
-# 2. Complete question `73`.
 
 using Literate;
 using LinearAlgebra;
@@ -328,7 +327,7 @@ println("Tomorrow: $(today() + Day(1))");
 collect(Date(2016,7,1):Day(1):Date(2016,7,31))
 
 # ## Question 035
-# Compute `((mA + mB) * (-mA / 2))`` in place. (★★☆)
+# Compute `((mA + mB) * (-mA / 2))` in place. (★★☆)
 
 mA = rand(2, 2);
 mB = rand(2, 2);
@@ -429,7 +428,7 @@ mX, mY = MeshGrid(vX, vY); #<! See https://discourse.julialang.org/t/48679
 @show mY
 
 # ## Question 047
-# Given two vectors, `vX`` and `vY``, construct the Cauchy matrix `mC`: `(Cij = 1 / (xi - yj))`. (★★☆)
+# Given two vectors, `vX` and `vY`, construct the Cauchy matrix `mC`: `(Cij = 1 / (xi - yj))`. (★★☆)
 
 vX = rand(5);
 vY = rand(5);
@@ -733,7 +732,9 @@ println(mA);
 # ## Question 073
 # Consider a set of 10 triplets describing 10 triangles (with shared vertices), find the set of unique line segments composing all the triangles. (★★★)
 
-# TODO: Need to understand the question.
+mA = rand(0:100, 10, 3); #<! Each row composes 3 veritces ([1] -> [2], [2] -> [3], [3] -> [1])
+mC = [sort!([vC[mod1(ii, end)], vC[mod1(ii + 1, end)]]) for ii in 1:(size(mA, 2) + 1), vC in eachrow(mA)][:] #<! Sorted combinations of vertices
+mC = unique(mC)
 
 # ## Question 074
 # Given a sorted array `vC` that corresponds to a bincount, produce an array `vA` such that `bincount(vA) == vC`. (★★★)
@@ -1244,6 +1245,9 @@ vYSegment = [vYInt[intIdx] for intIdx in vRSegment];
 hP = lineplot(vX, vY, canvas = DotCanvas, name = "Samples");
 lineplot!(hP, vXSegment, vYSegment, name = "Interpolated");
 hP
+
+# **Remark**: In order to be mathematically accurate the resolution of `vRSegment` must be high enough to be an integer factor of each segment.  
+# It can be done if the resolution is `1 / (prod(vR))` which is easily infeasible with `Float64`. So this is a good enough approximation.
 
 # ## Question 099
 # Given an integer `n` and a 2D array `mA`, find the rows which can be interpreted as draws from a multinomial distribution with `n` (Rows which only contain integers and which sum to `n`). (★★★)
