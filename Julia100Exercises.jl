@@ -487,7 +487,8 @@ mD
 # Convert a float (32 bits) array into an integer (32 bits) in place. (★★☆)
 
 vA = 100 .* rand(Float32, 5);
-vA .= round.(Int32, vA)
+vB = reinterpret(Int32, vA);
+VB = trunc.(Int32, vA)
 
 # ## Question 054
 # Read the following file (`Q0054.txt`). (★★☆)
