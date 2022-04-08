@@ -486,9 +486,16 @@ mD
 # ## Question 053
 # Convert a float (32 bits) array into an integer (32 bits) in place. (★★☆)
 
-vA = 100 .* rand(Float32, 5);
-vB = reinterpret(Int32, vA);
-VB = trunc.(Int32, vA)
+vA = 9999 .* rand(Float32, 5);
+vB = reinterpret(Int32, vA); #<! Creates a view
+@. vB = trunc(Int32, vA) #<! Updates the byes in th view (Inplace for `vA`)
+# The above is equivalent of:
+# ```julia
+# for ii in eachindex(vB)
+#     vB[ii] = trunc(Int32, vA[ii]);
+# end
+# vB
+# ```
 
 # ## Question 054
 # Read the following file (`Q0054.txt`). (★★☆)
