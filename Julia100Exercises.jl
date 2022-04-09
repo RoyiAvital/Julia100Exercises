@@ -153,6 +153,12 @@ mA[2:(end - 1), 2:(end - 1)] .= 0;
 mA = zeros(4, 5);
 mA[[LinearIndices(mA)[cartIdx] for cartIdx in CartesianIndices(mA) if (any(cartIdx.I .== 1) || cartIdx.I[1] == size(mA, 1) || cartIdx.I[2] == size(mA, 2))]] .= 1;
 
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+numRows = 4;
+numCols = 5;
+mA = Int[ii ∈ (1, numRows) || jj ∈ (1, numCols) for ii in 1:numRows, jj in 1:numCols];
+
 # ## Question 016
 # Add a border of zeros around the array. (★☆☆)
 
@@ -187,6 +193,10 @@ mA = zeros(8, 8);
 mA[2:2:end, 1:2:end] .= 1;
 mA[1:2:end, 2:2:end] .= 1;
 mA
+
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+mA = Int[isodd(ii + jj) for ii in 1:8, jj in 1:8];
 
 # ## Question 020
 # Convert the linear index 100 to a _Cartesian Index_ of a size `(6,7,8)`. (★☆☆)
@@ -228,6 +238,11 @@ mA = rand(2, 4) * randn(4, 3)
 
 vA = rand(1:10, 8);
 map!(x -> ((x > 3) && (x < 8)) ? -x : x, vA, vA)
+
+# Julia allows Math like notation as well (See `Q0027`):
+
+vA = rand(1:10, 8);
+map!(x -> 3 < x < 8 ? -x : x, vA, vA)
 
 # Using logical indices one could use:
 
@@ -359,10 +374,17 @@ mA .- rem.(mA, 1)
 
 mA = repeat(reshape(0:4, 1, 5), 5, 1)
 
+# One could also generate _row like_ range using tranpose:
+mA = repeat((0:4)', 5, 1);
+
 # ## Question 038
 # Generate an array using a generator of 10 numbers. (★☆☆)
 
 vA = collect(x for x in 1:10)
+
+# In Julia the result of collect can be achieved directly using _Array Comprehension_:
+
+vA = [x for x in 1:10];
 
 # ## Question 039
 # Create a vector of size 10 with values ranging from 0 to 1, both excluded. (★★☆)
@@ -373,17 +395,24 @@ vA = LinRange(0, 1, 12)[2:(end - 1)]
 # Create a random vector of size 10 and sort it. (★★☆)
 
 vA = rand(1:10, 10);
-sort(vA)
+sort(vA) #<! Use `sort!()` for inplace sorting
 
 # ## Question 041
 # Implement the `sum()` function manually. (★★☆)
 
 vA = rand(100);
-sumVal = vA[1]
-## Using `global` for scope in Literate
+
+function MySum(vA::Vector{T}) where{T <: Number}
+sumVal = vA[1];
 for ii in 2:length(vA)
-    global sumVal += vA[ii];
+    sumVal += vA[ii];
 end
+
+return sumVal;
+
+end
+
+MySum(vA)
 
 # ## Question 042
 # Check for equality of 2 arrays. (★★☆)
@@ -407,12 +436,23 @@ ConvToPolar = vX -> [hypot(vX[1], vX[2]), atan(vX[2], vX[1])]
 
 mB = [ConvToPolar(vX) for vX in eachrow(mA)]
 
+# In order to have the same output size:
+
+mC = reduce(hcat, mB)';
+
 # ## Question 045
 # Create random vector of size 10 and replace the maximum value by 0. (★★☆)
 
 vA = randn(10);
+
+# In case of a single maximum or all different values:
 vA[argmax(vA)] = 0;
 vA
+
+# General solution:
+
+maxVal = maximum(vA);
+vA .= (valA == maxVal ? 0 : valA for valA in vA); #<! Non allocating generator by using `.=`
 
 # ## Question 046
 # Create a a grid of `x` and `y` coordinates covering the `[0, 1] x [0, 1]` area. (★★☆)
@@ -426,6 +466,10 @@ mX, mY = MeshGrid(vX, vY); #<! See https://discourse.julialang.org/t/48679
 @show mX
 #+
 @show mY
+
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+mXY = [(ii, jj) for ii in 0:0.25:1, jj in 0:0.25:1]; #<! Also `tuple.(0:0.25:1, (0:0.25:1)')`
 
 # ## Question 047
 # Given two vectors, `vX` and `vY`, construct the Cauchy matrix `mC`: `(Cij = 1 / (xi - yj))`. (★★☆)
@@ -459,6 +503,14 @@ vA = rand(10);
 
 vA[argmin(abs.(vA .- inputVal))]
 
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+function ClosestValue(vA::Vector{T}, inputVal::T) where{T <: Number}
+    return argmin(y -> abs(y - inputVal), vA);
+end
+
+ClosestValue(vA, inputVal)
+
 # ## Question 051
 # Create a structured array representing a position `(x, y)` and a color `(r, g, b)`. (★★☆)
 
@@ -481,7 +533,7 @@ vMyColor    = [sPosColor(rand(1:maxVal, 2)..., rand(UInt8, 4)...) for _ in 1:num
 mX = rand(5, 2);
 vSumSqr = sum(vX -> vX .^ 2, mX, dims = 2);
 mD = vSumSqr .+ vSumSqr' - 2 * (mX * mX');
-mD
+mD #<! Apply `sqrt.()` for the actual norm
 
 # ## Question 053
 # Convert a float (32 bits) array into an integer (32 bits) in place. (★★☆)
@@ -595,13 +647,18 @@ end
 
 vA[closeSecondIdx] == vA[sortperm(abs.(vA .- inputVal))[2]]
 
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+vA[partialsortperm(abs.(vA .- inputVal), 2)]
+
+
 # ## Question 062
 # Considering two arrays with shape `(1, 3)` and `(3, 1)`, Compute their sum using an iterator. (★★☆)
 
 vA = rand(1, 3);
 vB = rand(3, 1);
 
-sum([aVal + bVal for aVal in vA, bVal in vB])
+sum(aVal + bVal for aVal in vA, bVal in vB)
 
 # ## Question 063
 # Create an array class that has a name attribute. (★★☆)
@@ -647,7 +704,7 @@ println("vF: $vF");
 
 mI = rand(UInt8, 1000, 1000, 3);
 
-numColors = length(unique([reinterpret(UInt32, [iPx[1], iPx[2], iPx[3], 0x00])[1] for iPx in eachrow(reshape(mI, :, 3))]));
+numColors = length(unique([reinterpret(UInt32, [iPx[1], iPx[2], iPx[3], 0x00])[1] for iPx in eachrow(reshape(mI, :, 3))])); #<! Reshaping as at the moment `eachslice()` doesn't support multiple `dims`.
 print("Number of Unique Colors: $numColors");
 
 # Another option:
@@ -655,8 +712,14 @@ print("Number of Unique Colors: $numColors");
 numColors = length(unique([UInt32(iPx[1]) + UInt32(iPx[2]) << 8 + UInt32(iPx[3]) << 16 for iPx in eachrow(reshape(mI, :, 3))]));
 print("Number of Unique Colors: $numColors");
 
+# Simpler way to slice a pixel:
+
+numColors = length(unique([UInt32(mI[ii, jj, 1]) + UInt32(mI[ii, jj, 2]) << 8 + UInt32(mI[ii, jj, 3]) << 16 for ii in 1:size(mI, 1), jj in 1:size(mI, 2)]));
+print("Number of Unique Colors: $numColors");
+
+
 # ## Question 067
-# Considering a three dimensions array, get sum over the last two axis at once. (★★★)
+# Considering a four dimensions array, get sum over the last two axis at once. (★★★)
 
 mA = rand(2, 2, 2, 2);
 sum(reshape(mA, (2, 2, :)), dims = 3)
@@ -1160,6 +1223,10 @@ end
 
 mB
 
+# By Tomer Arnon (https://github.com/tomerarnon):
+
+mB = reverse!(reduce(hcat, digits.(vA, base = 2, pad = 8))', dims = 2);
+
 # ## Question 096
 # Given a two dimensional array, extract unique rows. (★★★)
 
@@ -1196,7 +1263,7 @@ tullioVal ≈ sum(vA) #<! Sum
 vTullio ≈ vA .* vB #<! Multiplication
 
 # ## Question 098
-# Considering a path described by two vectors `vX` and `vY, sample it using equidistant samples. (★★★)
+# Considering a path described by two vectors `vX` and `vY`, sample it using equidistant samples. (★★★)
 
 # The way I interpreted the question is to create sub segments of the same length.  
 
