@@ -6,14 +6,14 @@
 #
 # In order to generate this file:
 # 1. Clone the repository (Or download).
-# 2. Activate the project.
+# 2. Activate and instantiate the project.
 # 3. Run:
 # ```Julia
 # using Literate;
 # Literate.markdown("Julia100Exercises.jl", name = "README", execute = true, flavor = Literate.CommonMarkFlavor());
 # ```
 #
-# **Remark**: Tested with Julia `1.7.2`.  
+# **Remark**: Tested with Julia `1.8.2`.  
 #
 # **To Do**:
 # 1. Reevaluate the difficulty level of each question.
@@ -143,7 +143,7 @@ mA[:, [1, end]] .= 1;
 mA[[1, end], :] .= 1;
 mA
 
-# An alternative way:
+# An alternative way (Different dimensions):
 
 mA = ones(4, 5);
 mA[2:(end - 1), 2:(end - 1)] .= 0;
@@ -153,10 +153,10 @@ mA[2:(end - 1), 2:(end - 1)] .= 0;
 mA = zeros(4, 5);
 mA[[LinearIndices(mA)[cartIdx] for cartIdx in CartesianIndices(mA) if (any(cartIdx.I .== 1) || cartIdx.I[1] == size(mA, 1) || cartIdx.I[2] == size(mA, 2))]] .= 1;
 
-# By Tomer Arnon (https://github.com/tomerarnon):
+# By [Tomer Arnon](https://github.com/tomerarnon):
 
-numRows = 4;
-numCols = 5;
+numRows = 5;
+numCols = 4;
 mA = Int[ii ∈ (1, numRows) || jj ∈ (1, numCols) for ii in 1:numRows, jj in 1:numCols];
 
 # ## Question 016
@@ -467,7 +467,7 @@ mX, mY = MeshGrid(vX, vY); #<! See https://discourse.julialang.org/t/48679
 #+
 @show mY
 
-# By Tomer Arnon (https://github.com/tomerarnon):
+# By [Tomer Arnon](https://github.com/tomerarnon):
 
 mXY = [(ii, jj) for ii in 0:0.25:1, jj in 0:0.25:1]; #<! Also `tuple.(0:0.25:1, (0:0.25:1)')`
 
@@ -503,7 +503,7 @@ vA = rand(10);
 
 vA[argmin(abs.(vA .- inputVal))]
 
-# By Tomer Arnon (https://github.com/tomerarnon):
+# By [Tomer Arnon](https://github.com/tomerarnon):
 
 function ClosestValue(vA::Vector{T}, inputVal::T) where{T <: Number}
     return argmin(y -> abs(y - inputVal), vA);
@@ -647,7 +647,7 @@ end
 
 vA[closeSecondIdx] == vA[sortperm(abs.(vA .- inputVal))[2]]
 
-# By Tomer Arnon (https://github.com/tomerarnon):
+# By [Tomer Arnon](https://github.com/tomerarnon):
 
 vA[partialsortperm(abs.(vA .- inputVal), 2)]
 
@@ -1223,7 +1223,7 @@ end
 
 mB
 
-# By Tomer Arnon (https://github.com/tomerarnon):
+# By [Tomer Arnon](https://github.com/tomerarnon):
 
 mB = reverse!(reduce(hcat, digits.(vA, base = 2, pad = 8))', dims = 2);
 
@@ -1334,8 +1334,8 @@ vI = [all(vA .== round.(vA)) && sum(vA) == sumVal for vA in eachrow(mA)];
 # ## Question 100
 # Compute bootstrapped `95%` confidence intervals for the mean of a 1D array `vA`. Namely, resample the elements of an array with replacement `N` times, compute the mean of each sample and then compute percentiles over the means. (★★★)
 
-numTrials   = 1000;
-numSamples  = 100;
+numTrials   = 10000;
+numSamples  = 1000;
 μ           = 0.5;
 
 vA = μ .+ randn(numSamples);
