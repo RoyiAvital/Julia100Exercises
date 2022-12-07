@@ -30,16 +30,6 @@ using Tullio;
 using StaticKernels;
 ````
 
-````
-[ Info: Precompiling UnicodePlots [b8865327-cd53-5732-bb35-84acbb429228]
-WARNING: method definition for centered at D:\Applications\Programming\JuliaWin\userdata\.julia\packages\GeometryBasics\3PqdK\src\primitives\rectangles.jl:515 declares type variable N but does not use it.
-WARNING: method definition for volume at D:\Applications\Programming\JuliaWin\userdata\.julia\packages\GeometryBasics\3PqdK\src\meshes.jl:209 declares type variable FT but does not use it.
-WARNING: method definition for volume at D:\Applications\Programming\JuliaWin\userdata\.julia\packages\GeometryBasics\3PqdK\src\meshes.jl:209 declares type variable VT but does not use it.
-WARNING: method definition for volume at D:\Applications\Programming\JuliaWin\userdata\.julia\packages\GeometryBasics\3PqdK\src\meshes.jl:221 declares type variable FT but does not use it.
-WARNING: method definition for volume at D:\Applications\Programming\JuliaWin\userdata\.julia\packages\GeometryBasics\3PqdK\src\meshes.jl:221 declares type variable VT but does not use it.
-
-````
-
 ## Question 001
 Import the `LinearAlgebra` package under the name `LA`. (★☆☆)
 
